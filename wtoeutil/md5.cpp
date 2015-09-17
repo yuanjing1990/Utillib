@@ -1,9 +1,8 @@
-
 #include <string.h>
 
 #include "md5.h"
 
-namespace bcl {
+namespace wtoeutil {
 
 /* Constants for MD5Transform routine. */
 #define S11 7

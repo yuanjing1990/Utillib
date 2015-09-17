@@ -1,11 +1,10 @@
-
 #ifndef MD5_H
 #define MD5_H
 
 #include <string>
 #include <fstream>
 
-namespace bcl {
+namespace wtoeutil {
 
 /* Type define */
 typedef unsigned char byte;
