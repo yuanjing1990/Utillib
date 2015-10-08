@@ -1,6 +1,6 @@
 #ifndef MD5_H
 #define MD5_H
-
+#include "utildef.h"
 #include <string>
 #include <fstream>
 
@@ -14,17 +14,56 @@ using std::string;
 using std::ifstream;
 
 /* MD5 declaration. */
-class MD5 {
+class UTIL_EXPORT MD5 {
 public:
+    /*
+     * Default Constructor
+     */
 	MD5();
+
+    /*
+     * Constructor with length and value
+     */
 	MD5(const void* input, size_t length);
+
+    /*
+     * Constructor with string
+     */
 	MD5(const string& str);
+
+    /*
+     * Constructor with input stream
+     */
 	MD5(ifstream& in);
+
+    /*
+     * Update the value with input
+     */
 	string update(const void* input, size_t length);
+
+    /*
+     * Update the value with string
+     */
 	string update(const string& str);
+
+    /*
+     * Update the value with input stream
+     */
 	string update(ifstream& in);
+
+    /*
+     * Compute the value and return byte's MD5
+     */
 	const byte* digest();
+
+    /*
+     * Return MD5 with string
+     */
 	string toString();
+
+    /*
+     * Reset the MD5
+     */
 	void reset();
 
 private:
