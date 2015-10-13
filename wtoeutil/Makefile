@@ -47,10 +47,14 @@ endif
 #source file,obj file and exe file setting
 SRC_FILES=$(shell ls *$(SRC_EXTEND))
 OBJ_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(OBJ_EXTEND))
-EXE_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(EXE_EXTEND))
+#EXE_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(EXE_EXTEND))
+EXE_FILES=util_wtoe.dll
 
 #dest setting
 all:$(EXE_FILES)
+
+$(EXE_FILES):$(OBJ_FILES)
+	$(CPP) $^ -o $@ $(LDFLAGS)
 
 clean:
 	@-rm -rf $(OBJ_FILES) $(EXE_FILES) *.ilk *.pdb *.manifest
