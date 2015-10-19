@@ -52,7 +52,13 @@ EXE_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(EXE_EXTEND))
 #dest setting
 all:$(EXE_FILES)
 
+$(EXE_FILES):wtoeutil
+
+wtoeutil:
+	(cd wtoeutil && make platform=$(platform))
+	cp wtoeutil/libwtoeutil.dll .
+
 clean:
 	@-rm -rf $(OBJ_FILES) $(EXE_FILES) *.ilk *.pdb *.manifest
 
-.PHONY:all clean
+.PHONY:all clean wtoeutil

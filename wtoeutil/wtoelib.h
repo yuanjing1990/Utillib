@@ -3,5 +3,7 @@
 
 #include "md5.h"
 #include "CircularQueue.h"
+#include "FileSystem.hpp"
+#include "DataFileBoost.hpp"
 
 #endif

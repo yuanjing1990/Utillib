@@ -35,7 +35,7 @@ LD=ld
 
 #compile flags setting
 CPPFLAGS+=-DDEBUG -DUTILLIB -g
-LDFLAGS+=-shared -lboost_system -lboost_thread
+LDFLAGS+=-shared -lboost_system -lboost_thread -lboost_filesystem
 
 #default rule setting
 %$(EXE_EXTEND): %$(OBJ_EXTEND)
