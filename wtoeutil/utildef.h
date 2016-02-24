@@ -11,4 +11,6 @@
 #define UTIL_EXPORT __attribute__((visibility("default")))
 #endif 
 
+#define interface struct
+
 #endif

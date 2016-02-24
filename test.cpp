@@ -41,4 +41,24 @@ int main(int argc,char* argv[])
     wtoeutil::getDirFileEntry(fileset,dir);
     std::for_each(fileset.begin(),fileset.end(),print);
     std::cout << "FileSystem test-------------------\n";
+
+    std::cout << "CfgParser test-------------------\n";
+    boost::shared_ptr<wtoeutil::CCfgManager> mgr = boost::make_shared<wtoeutil::CCfgManager>();
+    mgr->setCfgFileBasePath("./");
+    std::set<std::string> files;
+    files.insert("test.cfg");
+    mgr->setConfigFiles(files);
+    std::map<std::string,std::vector<SParaKeyValue> > cfgMap;
+    mgr->loadCfg(cfgMap);
+    for(std::map<std::string,std::vector<SParaKeyValue> >::iterator it = cfgMap.begin(); it != cfgMap.end(); ++it)
+    {
+        std::vector<SParaKeyValue> vec = it->second;
+        std::cout << "[" << it->first << "]\n";
+        for(int i = 0; i < vec.size(); ++i)
+        {
+            SParaKeyValue& val = vec.at(i);
+            std::cout << val.strGroupName << "," << val.strkeyName << "," << val.strkeyValue << std::endl;
+        }
+    }
+    std::cout << "CfgParser test-------------------\n";
 }
