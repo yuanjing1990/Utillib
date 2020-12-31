@@ -1,4 +1,4 @@
-﻿
+
 #ifndef DATAFILEBOOST_HPP_
 #define DATAFILEBOOST_HPP_
 

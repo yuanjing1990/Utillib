@@ -1,9 +1,10 @@
-﻿#ifndef CIRCULARQUEUE_H_
-#define CIRCULARQUEUE_H_
+#ifndef CIRCULARQUEUE_HPP_
+#define CIRCULARQUEUE_HPP_
 
-#include "utildef.h"
 #include <iostream>
 #include <boost/thread.hpp>
+
+#include "utildef.hpp"
 
 namespace wtoeutil 
 {

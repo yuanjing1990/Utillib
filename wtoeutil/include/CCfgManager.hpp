@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 #include "CfgParser.hpp"
-#include "utildef.h"
+#include "utildef.hpp"
     
 struct SParaKeyValue{
     std::string strGroupName;
@@ -36,56 +36,56 @@ class UTIL_EXPORT CCfgManager : public ICfgParserCallBack
                                         , public boost::enable_shared_from_this<CCfgManager>
 {
 public:
-    /** @brief      ¹¹Ôìº¯Êı
+    /** @brief      æ„é€ å‡½æ•°
      */
     CCfgManager();
 
-    /** @brief      Îö¹¹º¯Êı
+    /** @brief      ææ„å‡½æ•°
      */
     virtual ~CCfgManager();
 
 public:
     /************************************************************************/
-    /* ICfgParserCallBack ½Ó¿Ú*/
+    /* ICfgParserCallBack æ¥å£*/
     /************************************************************************/
 
-    /** @brief      ×é½âÎö¿ªÊ¼
+    /** @brief      ç»„è§£æå¼€å§‹
      */
     virtual bool groupBegin(const std::string & strGroupName);
 
-    /** @brief      Öµ½âÎö
+    /** @brief      å€¼è§£æ
      */
     virtual bool key(const std::string & strGroupName,
                         const std::string & strKeyName,
                         const std::string & strKeyValue);
 
-    /** @brief      ×é½âÎö½áÊø
+    /** @brief      ç»„è§£æç»“æŸ
      */
     virtual bool groupEnd(const std::string & strGroupName);
 
 public:
-    /** @brief      ÉèÖÃÅäÖÃÎÄ¼şµÄÂ·¾¶
+    /** @brief      è®¾ç½®é…ç½®æ–‡ä»¶çš„è·¯å¾„
      */
     void setCfgFileBasePath(const std::string & BasePath);
 
-    /** @brief      ÉèÖÃ¶ÁÈ¡ÎÄ¼şÁĞ±í
+    /** @brief      è®¾ç½®è¯»å–æ–‡ä»¶åˆ—è¡¨
      */
     void setConfigFiles( std::set<std::string> & filenames );
 
 
-    /** @brief      »ñÈ¡ÅäÖÃ²ÎÊı
+    /** @brief      è·å–é…ç½®å‚æ•°
      */
     void getConfigParas( std::vector<SParaKeyValue> & keyValue );
 
-    /** @brief      »ñÈ¡ËùÓĞÅäÖÃÎÄ¼ş²ÎÊı
+    /** @brief      è·å–æ‰€æœ‰é…ç½®æ–‡ä»¶å‚æ•°
      */
     void loadCfg(std::map< std::string, std::vector<SParaKeyValue > > &configs);
 
 private:
-    std::string m_basepath;                         //ÎÄ¼şËùÔÚÂ·¾¶
-    CCfgParser  m_cfgParser;                        //ÅäÖÃÎÄ¼ş½âÎöÆ÷
-    std::set<std::string> m_filename;               //ËùÓĞÅäÖÃÎÄ¼şÃû³Æ
-    std::vector<SParaKeyValue> m_keyValue;          //ÅäÖÃÎÄ¼ş¼üÖµ¶Ô
+    std::string m_basepath;                         //æ–‡ä»¶æ‰€åœ¨è·¯å¾„
+    CCfgParser  m_cfgParser;                        //é…ç½®æ–‡ä»¶è§£æå™¨
+    std::set<std::string> m_filename;               //æ‰€æœ‰é…ç½®æ–‡ä»¶åç§°
+    std::vector<SParaKeyValue> m_keyValue;          //é…ç½®æ–‡ä»¶é”®å€¼å¯¹
 };
 
 

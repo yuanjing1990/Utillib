@@ -1,39 +1,39 @@
 
 /** @file
- *  @brief          ÅäÖÃ½âÎöÊµÏÖÎÄ¼ş
+ *  @brief          é…ç½®è§£æå®ç°æ–‡ä»¶
  *  @author         huangjun
  *  @date           2013-6-20
  *  @version        1.00
  *  @note           
  *
- *  ÅäÖÃ½âÎöÊµÏÖÎÄ¼ş
+ *  é…ç½®è§£æå®ç°æ–‡ä»¶
  */
 
 #ifndef CFGPARSER_HPP_
 #define CFGPARSER_HPP_
 
-#include "utildef.h"
+#include "utildef.hpp"
 
 namespace wtoeutil{
 
 
 /**
  *  @class          mvd.ICfgParserCallBack
- *  @brief          ½âÎöÆ÷»Øµ÷½Ó¿Ú
+ *  @brief          è§£æå™¨å›è°ƒæ¥å£
  *  @author         huangjun
  *  @note           
  *
- *  ½âÎöÆ÷»Øµ÷½Ó¿Ú
+ *  è§£æå™¨å›è°ƒæ¥å£
  */
 interface UTIL_EXPORT ICfgParserCallBack {
 
     /**
-     *  @brief          Îö¹¹º¯Êı
+     *  @brief          ææ„å‡½æ•°
      *  @author         huangjun
      *  @return         void
      *  @note           
      *
-     *  Îö¹¹º¯Êı
+     *  ææ„å‡½æ•°
      *
      *  @remarks        
      *  @since          2013-6-27
@@ -43,17 +43,17 @@ interface UTIL_EXPORT ICfgParserCallBack {
     {
     }
 
-    /** @brief      ×é¿ªÊ¼
+    /** @brief      ç»„å¼€å§‹
      */
     virtual bool groupBegin(const std::string & strGroupName) = 0;
 
-    /** @brief      Öµ
+    /** @brief      å€¼
      */
     virtual bool key(const std::string & strGroupName,
                         const std::string & strKeyName,
                         const std::string & strKeyValue) = 0;
 
-    /** @brief      ×é½áÊø
+    /** @brief      ç»„ç»“æŸ
      */
     virtual bool groupEnd(const std::string & strGroupName) = 0;
 };
@@ -63,51 +63,51 @@ typedef boost::shared_ptr<ICfgParserCallBack>   CSpICfgParserCallBack;
 
 /**
  *  @class          mvd.CCfgParser
- *  @brief          ÅäÖÃ½âÎöÆ÷
+ *  @brief          é…ç½®è§£æå™¨
  *  @author         huangjun
  *  @note           
  *
- *  ÅäÖÃ½âÎöÆ÷
+ *  é…ç½®è§£æå™¨
  */
 class UTIL_EXPORT CCfgParser {
 
 public:
     
-    /** @brief      ¹¹Ôìº¯Êı
+    /** @brief      æ„é€ å‡½æ•°
      */
     CCfgParser();
 
-    /** @brief      Îö¹¹º¯Êı
+    /** @brief      ææ„å‡½æ•°
      */
     virtual ~CCfgParser();
 
-    /** @brief      ÉèÖÃ»Øµ÷½Ó¿Ú
+    /** @brief      è®¾ç½®å›è°ƒæ¥å£
      */
     void setCallBack(CSpICfgParserCallBack spCallBack);
 
-    /** @brief      ½âÎöÎÄ¼ş
+    /** @brief      è§£ææ–‡ä»¶
      */
     bool parse(const std::string & strCfgFilePath);
 
-    /** @brief      »ñÈ¡´íÎóĞÅÏ¢
+    /** @brief      è·å–é”™è¯¯ä¿¡æ¯
      */
     const std::string & getErrInfo();
 
-    /** @brief      »ñÈ¡´íÎóËùÔÚĞĞ
+    /** @brief      è·å–é”™è¯¯æ‰€åœ¨è¡Œ
      */
     uint32_t getErrLine();
 
-    /** @brief      »ñÈ¡´íÎóËùÔÚÁĞ
+    /** @brief      è·å–é”™è¯¯æ‰€åœ¨åˆ—
      */
     uint32_t getErrCol();
 
 private:
     
-    /** @brief      ½âÎö×´Ì¬
+    /** @brief      è§£æçŠ¶æ€
      */
     enum EParserStatus
     {
-        EPARSERSTATUS_LINE_START,           ///< ĞĞ¿ªÊ¼
+        EPARSERSTATUS_LINE_START,           ///< è¡Œå¼€å§‹
                                             //      '\n'    ->  
                                             //      '\0'    ->  
                                             //      isspace ->  
@@ -115,209 +115,209 @@ private:
                                             //      '['     ->  EPARSERSTATUS_GOT_LEFT_SQUARE
                                             //      '='     ->  EPARSERSTATUS_ERROR
                                             //      *       ->  EPARSERSTATUS_GETTING_KEYNAME
-        EPARSERSTATUS_GOT_LEFT_SQUARE,      ///< »ñÈ¡µ½ÁË '['
+        EPARSERSTATUS_GOT_LEFT_SQUARE,      ///< è·å–åˆ°äº† '['
                                             //      '\n'    ->  EPARSERSTATUS_ERROR
                                             //      '\0'    ->  EPARSERSTATUS_ERROR
                                             //      ']'     ->  EPARSERSTATUS_ERROR
                                             //      isspace ->  
                                             //      *       ->  EPARSERSTATUS_GETTING_GROUP_NAME
-        EPARSERSTATUS_GETTING_GROUP_NAME,   ///< ÕıÔÚ¶ÁÈ¡×éÃû
+        EPARSERSTATUS_GETTING_GROUP_NAME,   ///< æ­£åœ¨è¯»å–ç»„å
                                             //      '\n'    ->  EPARSERSTATUS_ERROR
                                             //      '\0'    ->  EPARSERSTATUS_ERROR
                                             //      isspace ->  EPARSERSTATUS_GOT_GROUP_NAME
                                             //      "]"     ->  EPARSERSTATUS_EXPECT_LINEEND
                                             //      *       ->  
-        EPARSERSTATUS_GOT_GROUP_NAME,       ///< ÒÑ»ñµÃ×éÃû£¬ÆÚ´ı ']'
+        EPARSERSTATUS_GOT_GROUP_NAME,       ///< å·²è·å¾—ç»„åï¼ŒæœŸå¾… ']'
                                             //      "]"     ->  EPARSERSTATUS_EXPECT_LINEEND
                                             //      isspace ->  
                                             //      '\n'    ->  EPARSERSTATUS_ERROR
                                             //      '\0'    ->  EPARSERSTATUS_ERROR
                                             //      *       ->  EPARSERSTATUS_ERROR
-        EPARSERSTATUS_EXPECT_LINEEND,       ///< ÆÚ´ı»ñÈ¡ĞĞ½áÎ²
+        EPARSERSTATUS_EXPECT_LINEEND,       ///< æœŸå¾…è·å–è¡Œç»“å°¾
                                             //      '\n'    ->  EPARSERSTATUS_LINE_START
                                             //      '\0'    ->  EPARSERSTATUS_LINE_START
                                             //      isspace ->  
                                             //      *       ->  EPARSERSTATUS_ERROR
 
-        EPARSERSTATUS_COMMENT,              ///< ×¢ÊÍĞĞ
+        EPARSERSTATUS_COMMENT,              ///< æ³¨é‡Šè¡Œ
                                             //      '\n'    ->  EPARSERSTATUS_LINE_START
                                             //      '\0'    ->  EPARSERSTATUS_LINE_START
                                             //      *       ->  
 
-        EPARSERSTATUS_GETTING_KEYNAME,      ///< ÕıÔÚ»ñÈ¡¼üÃû
+        EPARSERSTATUS_GETTING_KEYNAME,      ///< æ­£åœ¨è·å–é”®å
                                             //      '='     ->  EPARSERSTATUS_GOT_EQUAL
                                             //      '\n'    ->  EPARSERSTATUS_ERROR
                                             //      '\0'    ->  EPARSERSTATUS_ERROR
                                             //      *       ->  
 
-        EPARSERSTATUS_GOT_KEYNAME,          ///< ÒÑ¾­»ñÈ¡µ½¼üÃû
+        EPARSERSTATUS_GOT_KEYNAME,          ///< å·²ç»è·å–åˆ°é”®å
                                             //      isspace ->  
                                             //      '='     ->  EPARSERSTATUS_GOT_EQUAL
                                             //      '\n'    ->  EPARSERSTATUS_ERROR
                                             //      '\0'    ->  EPARSERSTATUS_ERROR
                                             //      *       ->  EPARSERSTATUS_ERROR
 
-        EPARSERSTATUS_GOT_EQUAL,            ///< ÒÑ¾­»ñµÃÃûÖµ·Ö¸ô·û
+        EPARSERSTATUS_GOT_EQUAL,            ///< å·²ç»è·å¾—åå€¼åˆ†éš”ç¬¦
                                             //      '\n'    ->  EPARSERSTATUS_LINE_START
                                             //      '\0'    ->  EPARSERSTATUS_LINE_START
                                             //      isspace ->  
                                             //      *       ->  EPARSERSTATUS_GETTING_KEYVALUE
 
-        EPARSERSTATUS_GETTING_KEYVALUE,     ///< ÕıÔÚ»ñÈ¡¼üÖµ
+        EPARSERSTATUS_GETTING_KEYVALUE,     ///< æ­£åœ¨è·å–é”®å€¼
                                             //      '\n'    ->  EPARSERSTATUS_LINE_START
                                             //      '\0'    ->  EPARSERSTATUS_LINE_START
                                             //      *       ->  
 
-        EPARSERSTATUS_ERROR,                ///< ½âÎö×´Ì¬´íÎó
+        EPARSERSTATUS_ERROR,                ///< è§£æçŠ¶æ€é”™è¯¯
 
         EPARSERSTATUS_NUMBER
     };
 
     typedef bool (*StatusHandler)( CCfgParser * pThis, char c );
 
-    /** @brief      ½âÎö»Øµ÷½Ó¿Ú
+    /** @brief      è§£æå›è°ƒæ¥å£
      */
     CSpICfgParserCallBack   m_spCallBack;
 
-    /** @brief      ½âÎö×´Ì¬
+    /** @brief      è§£æçŠ¶æ€
      */
     EParserStatus           m_parserStatus;
 
-    /** @brief      ×éÃû
+    /** @brief      ç»„å
      */
     std::string             m_groupName;
 
-    /** @brief      ±ê¼ÇÊÇ·ñµ÷ÓÃÁËgroupBegin
+    /** @brief      æ ‡è®°æ˜¯å¦è°ƒç”¨äº†groupBegin
      */
     bool                    m_bNeedCallGroupBegin;
 
-    /** @brief      ¼üÃû
+    /** @brief      é”®å
      */
     std::string             m_keyName;
 
-    /** @brief      µ±Ç°¶ÁÈ¡µÄ¼üÃûÎ²²¿µÄ¿Õ¸ñ
-     *              Ö»ÓĞÔÚ¶ÁÈ¡µ½·Ç¿Õ¸ñÊ±£¬²Å½«ÕâÀïµÄÄÚÈİÌí¼Óµ½ m_keyName ÖĞ
+    /** @brief      å½“å‰è¯»å–çš„é”®åå°¾éƒ¨çš„ç©ºæ ¼
+     *              åªæœ‰åœ¨è¯»å–åˆ°éç©ºæ ¼æ—¶ï¼Œæ‰å°†è¿™é‡Œçš„å†…å®¹æ·»åŠ åˆ° m_keyName ä¸­
      */
     std::string             m_keyNameSpace;
 
-    /** @brief      ¼üÖµ
+    /** @brief      é”®å€¼
      */
     std::string             m_keyValue;
 
-    /** @brief      µ±Ç°¶ÁÈ¡µÄ¼üÖµÎ²²¿µÄ¿Õ¸ñ
-     *              Ö»ÓĞÔÚ¶ÁÈ¡µ½·Ç¿Õ¸ñÊ±£¬²Å½«ÕâÀïµÄÄÚÈİÌí¼Óµ½ m_keyValue ÖĞ
+    /** @brief      å½“å‰è¯»å–çš„é”®å€¼å°¾éƒ¨çš„ç©ºæ ¼
+     *              åªæœ‰åœ¨è¯»å–åˆ°éç©ºæ ¼æ—¶ï¼Œæ‰å°†è¿™é‡Œçš„å†…å®¹æ·»åŠ åˆ° m_keyValue ä¸­
      */
     std::string             m_keyValueSpace;
 
-    /** @brief      ´íÎóĞÅÏ¢
+    /** @brief      é”™è¯¯ä¿¡æ¯
      */
     std::string             m_errInfo;
 
-    /** @brief      µ±Ç°½âÎöµÄĞĞºÅ
+    /** @brief      å½“å‰è§£æçš„è¡Œå·
      */
     uint32_t                m_line;
 
-    /** @brief      µ±Ç°½âÎöµÄÁĞºÅ
+    /** @brief      å½“å‰è§£æçš„åˆ—å·
      */
     uint32_t                m_col;
 
-    /** @brief      ×´Ì¬´¦ÀíÆ÷
+    /** @brief      çŠ¶æ€å¤„ç†å™¨
      */
     StatusHandler           m_statusHandlers[EPARSERSTATUS_NUMBER];
 
 private:
     
-    /** @brief      ³õÊ¼»¯½âÎö
+    /** @brief      åˆå§‹åŒ–è§£æ
      */
     void initParse();
 
-    /** @brief      »ñÈ¡µ½ÁË×éÃû
+    /** @brief      è·å–åˆ°äº†ç»„å
      */
     bool groupBegin();
 
-    /** @brief      »ñÈ¡µ½ÁË¼üÃû×Ö¶Ô
+    /** @brief      è·å–åˆ°äº†é”®åå­—å¯¹
      */
     bool key();
 
-    /** @brief      »ñÈ¡µ½ÁË×éÃû
+    /** @brief      è·å–åˆ°äº†ç»„å
      */
     bool groupEnd();
 
-    /** @brief      ³õÊ¼»¯×éÃû»º³åÇø
+    /** @brief      åˆå§‹åŒ–ç»„åç¼“å†²åŒº
      */
     void initGroupName();
 
-    /** @brief      ½«×Ö·ûÌí¼Óµ½×éÃû»º³åÇø
+    /** @brief      å°†å­—ç¬¦æ·»åŠ åˆ°ç»„åç¼“å†²åŒº
      */
     void putGroupName(char c);
 
-    /** @brief      ³õÊ¼»¯¼üÃû»º³åÇø
+    /** @brief      åˆå§‹åŒ–é”®åç¼“å†²åŒº
      */
     void initKeyName();
 
-    /** @brief      ½«×Ö·ûÌí¼Ó¼üÃû»º³åÇø
+    /** @brief      å°†å­—ç¬¦æ·»åŠ é”®åç¼“å†²åŒº
      */
     void putKeyName(char c);
 
-    /** @brief      ³õÊ¼»¯¼üÖµ»º³åÇø
+    /** @brief      åˆå§‹åŒ–é”®å€¼ç¼“å†²åŒº
      */
     void initKeyValue();
 
-    /** @brief      ½«×Ö·ûÌí¼Ó¼üÖµ»º³åÇø
+    /** @brief      å°†å­—ç¬¦æ·»åŠ é”®å€¼ç¼“å†²åŒº
      */
     void putKeyValue(char c);
 
-    /** @brief      ÊÇ·ñÎª¿Õ¸ñ
+    /** @brief      æ˜¯å¦ä¸ºç©ºæ ¼
      */
     static bool isspace(char c);
 
 private:
 
     /************************************************************************/
-    /* ×´Ì¬´¦Àíº¯Êı */
+    /* çŠ¶æ€å¤„ç†å‡½æ•° */
     /************************************************************************/
 
-    /** @brief      EPARSERSTATUS_LINE_START ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_LINE_START å¤„ç†å‡½æ•°
      */
     static bool lineStartHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GOT_LEFT_SQUARE ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GOT_LEFT_SQUARE å¤„ç†å‡½æ•°
      */
     static bool gotLeftSquareHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GETTING_GROUP_NAME ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GETTING_GROUP_NAME å¤„ç†å‡½æ•°
      */
     static bool gettingGroupNameHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GOT_GROUP_NAME ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GOT_GROUP_NAME å¤„ç†å‡½æ•°
      */
     static bool gotGroupNameHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_EXPECT_LINEEND ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_EXPECT_LINEEND å¤„ç†å‡½æ•°
      */
     static bool expectLinefeedHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_COMMENT ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_COMMENT å¤„ç†å‡½æ•°
      */
     static bool commentHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GETTING_KEYNAME ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GETTING_KEYNAME å¤„ç†å‡½æ•°
      */
     static bool gettingKeyNameHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GOT_KEYNAME ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GOT_KEYNAME å¤„ç†å‡½æ•°
      */
     static bool gotKeyNameHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GOT_EQUAL ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GOT_EQUAL å¤„ç†å‡½æ•°
      */
     static bool gotEqualHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_GETTING_KEYVALUE ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_GETTING_KEYVALUE å¤„ç†å‡½æ•°
      */
     static bool gettingKeyValueHandler( CCfgParser * pThis, char c );
 
-    /** @brief      EPARSERSTATUS_ERROR ´¦Àíº¯Êı
+    /** @brief      EPARSERSTATUS_ERROR å¤„ç†å‡½æ•°
      */
     static bool errorHandler( CCfgParser * pThis, char c );
 };

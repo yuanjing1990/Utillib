@@ -34,7 +34,7 @@ CC=gcc
 LD=ld
 
 #compile flags setting
-CPPFLAGS+=-DDEBUG -Iwtoeutil/ -g
+CPPFLAGS+=-DDEBUG -Iwtoeutil/include -g
 LDFLAGS+=-Lwtoeutil -lwtoeutil -lboost_system
 
 #default rule setting
@@ -56,7 +56,7 @@ $(EXE_FILES):wtoeutil
 
 wtoeutil:
 	(cd wtoeutil && make platform=$(platform))
-	cp wtoeutil/libwtoeutil.dll .
+	cp wtoeutil/libwtoeutil.so .
 
 clean:
 	@-rm -rf $(OBJ_FILES) $(EXE_FILES) *.ilk *.pdb *.manifest

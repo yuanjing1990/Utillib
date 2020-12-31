@@ -1,12 +1,12 @@
 
 /** @file
- *  @brief          ÅäÖÃ½âÎöÊµÏÖÎÄ¼ş
+ *  @brief          é…ç½®è§£æå®ç°æ–‡ä»¶
  *  @author         huangjun
  *  @date           2013-6-20
  *  @version        1.00
  *  @note           
  *
- *  ÅäÖÃ½âÎöÊµÏÖÎÄ¼ş
+ *  é…ç½®è§£æå®ç°æ–‡ä»¶
  */
 #include <boost/shared_ptr.hpp>
 #include <fstream>
@@ -17,12 +17,12 @@ namespace wtoeutil{
 
 
 /**
- *  @brief          ¹¹Ôìº¯Êı
+ *  @brief          æ„é€ å‡½æ•°
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  ¹¹Ôìº¯Êı
+ *  æ„é€ å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -54,12 +54,12 @@ CCfgParser::CCfgParser() : m_spCallBack()
 }
 
 /**
- *  @brief          Îö¹¹º¯Êı
+ *  @brief          ææ„å‡½æ•°
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  Îö¹¹º¯Êı
+ *  ææ„å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -70,13 +70,13 @@ CCfgParser::~CCfgParser()
 }
 
 /**
- *  @brief          ÉèÖÃ»Øµ÷½Ó¿Ú
+ *  @brief          è®¾ç½®å›è°ƒæ¥å£
  *  @author         huangjun
- *  @param[in]      spCallBack      »Øµ÷½Ó¿Ú
+ *  @param[in]      spCallBack      å›è°ƒæ¥å£
  *  @return         void
  *  @note           
  *
- *  ÉèÖÃ»Øµ÷½Ó¿Ú
+ *  è®¾ç½®å›è°ƒæ¥å£
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -88,13 +88,13 @@ void CCfgParser::setCallBack(CSpICfgParserCallBack spCallBack)
 }
 
 /**
- *  @brief          ½âÎöÎÄ¼ş
+ *  @brief          è§£ææ–‡ä»¶
  *  @author         huangjun
- *  @param[in]      strCfgFilePath      ÎÄ¼şÂ·¾¶
- *  @return         bool                ÊÇ·ñ³É¹¦
+ *  @param[in]      strCfgFilePath      æ–‡ä»¶è·¯å¾„
+ *  @return         bool                æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  ½âÎöÎÄ¼ş
+ *  è§£ææ–‡ä»¶
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -128,7 +128,7 @@ bool CCfgParser::parse(const std::string & strCfgFilePath)
     char            c = '\0';
     bool            bRet = true;
 
-    // ³õÊ¼»¯½âÎöÆ÷
+    // åˆå§‹åŒ–è§£æå™¨
     initParse();
 
     while ( !ifs.eof() )
@@ -136,8 +136,8 @@ bool CCfgParser::parse(const std::string & strCfgFilePath)
         ifs.get( c );
         if ( ifs.fail() )
         {
-            // ifstream ÔÚ¶Áµ½×îºóÒ»¸ö×Ö·ûºó£¬²¢²»»á eof()
-            // ¶øÊÇÔÚ¶ÁÏÂÒ»¸ö×Ö·ûÊ±Ê§°Ü£¬´ËÊ±Òª×öÅĞ¶Ï
+            // ifstream åœ¨è¯»åˆ°æœ€åä¸€ä¸ªå­—ç¬¦åï¼Œå¹¶ä¸ä¼š eof()
+            // è€Œæ˜¯åœ¨è¯»ä¸‹ä¸€ä¸ªå­—ç¬¦æ—¶å¤±è´¥ï¼Œæ­¤æ—¶è¦åšåˆ¤æ–­
             break;
         }
 
@@ -149,13 +149,13 @@ bool CCfgParser::parse(const std::string & strCfgFilePath)
 
         if ( '\n' == c )
         {
-            // »»ĞĞ·û£¬Ôö¼ÓĞĞºÅ
+            // æ¢è¡Œç¬¦ï¼Œå¢åŠ è¡Œå·
             ++ m_line;
             m_col = 1;
         }
         else
         {
-            // Ôö¼ÓÁĞºÅ
+            // å¢åŠ åˆ—å·
             ++ m_col;
         }
     }
@@ -167,23 +167,23 @@ bool CCfgParser::parse(const std::string & strCfgFilePath)
         return false;
     }
 
-    // ×îºóÌí¼ÓÒ»¸ö½áÊø·û£¬½áÊø´¦Àí
+    // æœ€åæ·»åŠ ä¸€ä¸ªç»“æŸç¬¦ï¼Œç»“æŸå¤„ç†
     if ( !m_statusHandlers[m_parserStatus](this, '\0') )
     {
         return false;
     }
 
-    // ½áÊøµô×îºóÒ»¸ö×é
+    // ç»“æŸæ‰æœ€åä¸€ä¸ªç»„
     return groupEnd();
 }
 
 /**
- *  @brief          »ñÈ¡´íÎóĞÅÏ¢
+ *  @brief          è·å–é”™è¯¯ä¿¡æ¯
  *  @author         huangjun
- *  @return         std::string     ´íÎóĞÅÏ¢
+ *  @return         std::string     é”™è¯¯ä¿¡æ¯
  *  @note           
  *
- *  »ñÈ¡´íÎóĞÅÏ¢
+ *  è·å–é”™è¯¯ä¿¡æ¯
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -195,12 +195,12 @@ const std::string & CCfgParser::getErrInfo()
 }
 
 /**
- *  @brief          »ñÈ¡´íÎóËùÔÚĞĞ
+ *  @brief          è·å–é”™è¯¯æ‰€åœ¨è¡Œ
  *  @author         huangjun
- *  @return         uint32_t        ´íÎóËùÔÚĞĞºÅ
+ *  @return         uint32_t        é”™è¯¯æ‰€åœ¨è¡Œå·
  *  @note           
  *
- *  »ñÈ¡´íÎóËùÔÚĞĞ
+ *  è·å–é”™è¯¯æ‰€åœ¨è¡Œ
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -212,12 +212,12 @@ uint32_t CCfgParser::getErrLine()
 }
 
 /**
- *  @brief          »ñÈ¡´íÎóËùÔÚÁĞ
+ *  @brief          è·å–é”™è¯¯æ‰€åœ¨åˆ—
  *  @author         huangjun
- *  @return         uint32_t        ´íÎóËùÔÚÁĞºÅ
+ *  @return         uint32_t        é”™è¯¯æ‰€åœ¨åˆ—å·
  *  @note           
  *
- *  »ñÈ¡´íÎóËùÔÚÁĞ
+ *  è·å–é”™è¯¯æ‰€åœ¨åˆ—
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -230,12 +230,12 @@ uint32_t CCfgParser::getErrCol()
 
 
 /**
- *  @brief          ³õÊ¼»¯½âÎö
+ *  @brief          åˆå§‹åŒ–è§£æ
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  ³õÊ¼»¯½âÎö
+ *  åˆå§‹åŒ–è§£æ
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -243,38 +243,38 @@ uint32_t CCfgParser::getErrCol()
  */
 void CCfgParser::initParse()
 {
-    // ³õÊ¼»¯½âÎö×´Ì¬
+    // åˆå§‹åŒ–è§£æçŠ¶æ€
     m_parserStatus = EPARSERSTATUS_LINE_START;
 
-    // ³õÊ¼»¯×éÃû
+    // åˆå§‹åŒ–ç»„å
     initGroupName();
 
-    // Óöµ½ÎŞÃû×éÖĞµÄ¼üÖµĞèµ÷ÓÃÒ»´ÎgroupBegin
+    // é‡åˆ°æ— åç»„ä¸­çš„é”®å€¼éœ€è°ƒç”¨ä¸€æ¬¡groupBegin
     m_bNeedCallGroupBegin = true;   
 
-    // ³õÊ¼»¯¼üÃû
+    // åˆå§‹åŒ–é”®å
     initKeyName();
 
-    // ³õÊ¼»¯¼üÖµ
+    // åˆå§‹åŒ–é”®å€¼
     initKeyValue();
 
-    // ³õÊ¼»¯´íÎóĞÅÏ¢
+    // åˆå§‹åŒ–é”™è¯¯ä¿¡æ¯
     m_errInfo = "";
 
-    // ³õÊ¼»¯ĞĞºÅ
+    // åˆå§‹åŒ–è¡Œå·
     m_line = 1;
 
-    // ³õÊ¼»¯ÁĞºÅ
+    // åˆå§‹åŒ–åˆ—å·
     m_col = 1;
 }
 
 /**
- *  @brief          ×é½âÎö¿ªÊ¼
+ *  @brief          ç»„è§£æå¼€å§‹
  *  @author         huangjun
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  ×é½âÎö¿ªÊ¼
+ *  ç»„è§£æå¼€å§‹
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -290,19 +290,19 @@ bool CCfgParser::groupBegin()
         return false;
     }
 
-    // Çå³ıÎŞÃû×é±ê¼Ç
+    // æ¸…é™¤æ— åç»„æ ‡è®°
     m_bNeedCallGroupBegin = false;
 
     return true;
 }
 
 /**
- *  @brief          »ñÈ¡µ½ÁË¼üÃû×Ö¶Ô
+ *  @brief          è·å–åˆ°äº†é”®åå­—å¯¹
  *  @author         huangjun
- *  @return         bool            ÊÇ·ñ³É¹¦
+ *  @return         bool            æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  »ñÈ¡µ½ÁË¼üÃû×Ö¶Ô
+ *  è·å–åˆ°äº†é”®åå­—å¯¹
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -312,8 +312,8 @@ bool CCfgParser::key()
 {
     if ( m_bNeedCallGroupBegin )
     {
-        // ¸Ã¼üÖµÎªÎŞÃû×éÖĞµÄµÚÒ»¸ö¼ü
-        // ĞèÒªµ÷ÓÃÒ»´Î groupBegin
+        // è¯¥é”®å€¼ä¸ºæ— åç»„ä¸­çš„ç¬¬ä¸€ä¸ªé”®
+        // éœ€è¦è°ƒç”¨ä¸€æ¬¡ groupBegin
         if ( !groupBegin() )
         {
             return false;
@@ -335,12 +335,12 @@ bool CCfgParser::key()
 }
 
 /**
- *  @brief          ×é½âÎö½áÊø
+ *  @brief          ç»„è§£æç»“æŸ
  *  @author         huangjun
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  ×é½âÎö½áÊø
+ *  ç»„è§£æç»“æŸ
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -348,7 +348,7 @@ bool CCfgParser::key()
  */
 bool CCfgParser::groupEnd()
 {
-    // ²»ÔÙÅĞ¶Ï×éÃûÊÇ·ñ´æÔÚ
+    // ä¸å†åˆ¤æ–­ç»„åæ˜¯å¦å­˜åœ¨
 #if 0
     if ( m_groupName.empty() )
     {
@@ -358,7 +358,7 @@ bool CCfgParser::groupEnd()
 
     if ( m_bNeedCallGroupBegin )
     {
-        // »¹Ã»ÓĞµ÷ÓÃ¹ı groupBegin£¬´ËÊ±²»ÓÃµ÷ÓÃ groupEnd
+        // è¿˜æ²¡æœ‰è°ƒç”¨è¿‡ groupBeginï¼Œæ­¤æ—¶ä¸ç”¨è°ƒç”¨ groupEnd
         return true;
     }
 
@@ -374,12 +374,12 @@ bool CCfgParser::groupEnd()
 }
 
 /**
- *  @brief          ³õÊ¼»¯×éÃû»º³åÇø
+ *  @brief          åˆå§‹åŒ–ç»„åç¼“å†²åŒº
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  ³õÊ¼»¯×éÃû»º³åÇø
+ *  åˆå§‹åŒ–ç»„åç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -391,13 +391,13 @@ void CCfgParser::initGroupName()
 }
 
 /**
- *  @brief          ½«×Ö·ûÌí¼Óµ½×éÃû»º³åÇø
+ *  @brief          å°†å­—ç¬¦æ·»åŠ åˆ°ç»„åç¼“å†²åŒº
  *  @author         huangjun
- *  @param[in]      c           ÒªÊä³öµÄ×Ö·û
+ *  @param[in]      c           è¦è¾“å‡ºçš„å­—ç¬¦
  *  @return         void
  *  @note           
  *
- *  ½«×Ö·ûÌí¼Óµ½×éÃû»º³åÇø
+ *  å°†å­—ç¬¦æ·»åŠ åˆ°ç»„åç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -409,12 +409,12 @@ void CCfgParser::putGroupName(char c)
 }
 
 /**
- *  @brief          ³õÊ¼»¯¼üÃû»º³åÇø
+ *  @brief          åˆå§‹åŒ–é”®åç¼“å†²åŒº
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  ³õÊ¼»¯¼üÃû»º³åÇø
+ *  åˆå§‹åŒ–é”®åç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -427,13 +427,13 @@ void CCfgParser::initKeyName()
 }
 
 /**
- *  @brief          ½«×Ö·ûÌí¼Ó¼üÃû»º³åÇø
+ *  @brief          å°†å­—ç¬¦æ·»åŠ é”®åç¼“å†²åŒº
  *  @author         huangjun
- *  @param[in]      c           ÒªÊä³öµÄ×Ö·û
+ *  @param[in]      c           è¦è¾“å‡ºçš„å­—ç¬¦
  *  @return         void
  *  @note           
  *
- *  ½«×Ö·ûÌí¼Ó¼üÃû»º³åÇø
+ *  å°†å­—ç¬¦æ·»åŠ é”®åç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -443,29 +443,29 @@ void CCfgParser::putKeyName(char c)
 {
     if ( isspace( c ) )
     {
-        // Êä³öµ½¿Õ¸ñ»º³åÇø
+        // è¾“å‡ºåˆ°ç©ºæ ¼ç¼“å†²åŒº
         m_keyNameSpace += c;
     }
     else
     {
-        // ½«¿Õ¸ñ»º³åÇøµÄÄÚÈİÌí¼Óµ½ name Î²²¿
+        // å°†ç©ºæ ¼ç¼“å†²åŒºçš„å†…å®¹æ·»åŠ åˆ° name å°¾éƒ¨
         m_keyName += m_keyNameSpace;
 
-        // Çå¿Õ¿Õ¸ñ»º³åÇø
+        // æ¸…ç©ºç©ºæ ¼ç¼“å†²åŒº
         m_keyNameSpace = "";
 
-        // Ìí¼Ó×Ö·û
+        // æ·»åŠ å­—ç¬¦
         m_keyName += c;
     }
 }
 
 /**
- *  @brief          ³õÊ¼»¯¼üÖµ»º³åÇø
+ *  @brief          åˆå§‹åŒ–é”®å€¼ç¼“å†²åŒº
  *  @author         huangjun
  *  @return         void
  *  @note           
  *
- *  ³õÊ¼»¯¼üÖµ»º³åÇø
+ *  åˆå§‹åŒ–é”®å€¼ç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -478,13 +478,13 @@ void CCfgParser::initKeyValue()
 }
 
 /**
- *  @brief          ½«×Ö·ûÌí¼Ó¼üÖµ»º³åÇø
+ *  @brief          å°†å­—ç¬¦æ·»åŠ é”®å€¼ç¼“å†²åŒº
  *  @author         huangjun
- *  @param[in]      c           ÒªÊä³öµÄ×Ö·û
+ *  @param[in]      c           è¦è¾“å‡ºçš„å­—ç¬¦
  *  @return         void
  *  @note           
  *
- *  ½«×Ö·ûÌí¼Ó¼üÖµ»º³åÇø
+ *  å°†å­—ç¬¦æ·»åŠ é”®å€¼ç¼“å†²åŒº
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -494,18 +494,18 @@ void CCfgParser::putKeyValue(char c)
 {
     if ( isspace( c ) )
     {
-        // Êä³öµ½¿Õ¸ñ»º³åÇø
+        // è¾“å‡ºåˆ°ç©ºæ ¼ç¼“å†²åŒº
         m_keyValueSpace += c;
     }
     else
     {
-        // ½«¿Õ¸ñ»º³åÇøµÄÄÚÈİÌí¼Óµ½ value Î²²¿
+        // å°†ç©ºæ ¼ç¼“å†²åŒºçš„å†…å®¹æ·»åŠ åˆ° value å°¾éƒ¨
         m_keyValue += m_keyValueSpace;
 
-        // Çå¿Õ¿Õ¸ñ»º³åÇø
+        // æ¸…ç©ºç©ºæ ¼ç¼“å†²åŒº
         m_keyValueSpace = "";
 
-        // Ìí¼Ó×Ö·û
+        // æ·»åŠ å­—ç¬¦
         m_keyValue += c;
     }
 }
@@ -513,13 +513,13 @@ void CCfgParser::putKeyValue(char c)
 
 
 /**
- *  @brief          ÊÇ·ñÎª¿Õ¸ñ
+ *  @brief          æ˜¯å¦ä¸ºç©ºæ ¼
  *  @author         huangjun
- *  @param[in]      c           ±»ÅĞ¶ÏµÄ×Ö·û
- *  @return         bool        ÊÇ·ñÎª×Ö·û
+ *  @param[in]      c           è¢«åˆ¤æ–­çš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦ä¸ºå­—ç¬¦
  *  @note           
  *
- *  ÊÇ·ñÎª¿Õ¸ñ
+ *  æ˜¯å¦ä¸ºç©ºæ ¼
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -541,14 +541,14 @@ bool CCfgParser::isspace(char c)
 
 
 /**
- *  @brief          EPARSERSTATUS_LINE_START ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_LINE_START å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_LINE_START ´¦Àíº¯Êı
+ *  EPARSERSTATUS_LINE_START å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -556,7 +556,7 @@ bool CCfgParser::isspace(char c)
  */
 bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
 {
-    // ĞĞ¿ªÊ¼
+    // è¡Œå¼€å§‹
     //      '\n'    ->  
     //      '\0'    ->  
     //      isspace ->  
@@ -569,28 +569,28 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
         || '\0' == c
         || isspace( c ) )
     {
-        // ²»¸Ä±ä×´Ì¬
+        // ä¸æ”¹å˜çŠ¶æ€
         return true;
     }
 
     if ( '#' == c )
     {
-        // Ìøµ½»ñÈ¡×¢ÊÍ×´Ì¬
+        // è·³åˆ°è·å–æ³¨é‡ŠçŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_COMMENT;
         return true;
     }
 
     if ( '[' == c )
     {
-        // ½«ÉÏÒ»¸ö×é½áÊøµô
+        // å°†ä¸Šä¸€ä¸ªç»„ç»“æŸæ‰
         if ( !pThis->groupEnd() )
         {
-            // Ìø×ªµ½´íÎó×´Ì¬
+            // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
 
-        // Ìøµ½ÒÑ»ñÈ¡×éÃû×óÀ¨ºÅ×´Ì¬
+        // è·³åˆ°å·²è·å–ç»„åå·¦æ‹¬å·çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_GOT_LEFT_SQUARE;
         return true;
     }
@@ -602,36 +602,36 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
         return false;
     }
 
-    // ²»ÔÙÅĞ¶Ï¼üÖµÊÇ·ñÔÚ×éÖĞ
+    // ä¸å†åˆ¤æ–­é”®å€¼æ˜¯å¦åœ¨ç»„ä¸­
 #if 0
     if ( pThis->m_groupName.empty() )
     {
-        // ´ËÊ±Ã»ÓĞ×é
+        // æ­¤æ—¶æ²¡æœ‰ç»„
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Found key not in group!";
         return false;
     }
 #endif
 
-    // »ñÈ¡µ½¼üÃûµÄµÚÒ»¸ö×Ö·û
+    // è·å–åˆ°é”®åçš„ç¬¬ä¸€ä¸ªå­—ç¬¦
     pThis->initKeyName();
     pThis->initKeyValue();
     pThis->putKeyName( c );
 
-    // Ìø×ªµ½»ñÈ¡¼üÃû×´Ì¬
+    // è·³è½¬åˆ°è·å–é”®åçŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_KEYNAME;
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GOT_LEFT_SQUARE ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GOT_LEFT_SQUARE å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GOT_LEFT_SQUARE ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GOT_LEFT_SQUARE å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -639,7 +639,7 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
 {
-    // »ñÈ¡µ½ÁË '['
+    // è·å–åˆ°äº† '['
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      ']'     ->  EPARSERSTATUS_ERROR
@@ -650,7 +650,7 @@ bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
         || '\0' == c
         || ']' == c)
     {
-        // Ìø×ªµ½´íÎó×´Ì¬
+        // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect group name!";
         return false;
@@ -658,29 +658,29 @@ bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
 
     if ( isspace( c ) )
     {
-        // ¼ÌĞøÔÚ¸Ã×´Ì¬
-        // µÈ´ı×éÃûµÄµÚÒ»¸ö×Ö·û
+        // ç»§ç»­åœ¨è¯¥çŠ¶æ€
+        // ç­‰å¾…ç»„åçš„ç¬¬ä¸€ä¸ªå­—ç¬¦
         return true;
     }
 
-    // »ñÈ¡µ½×éÃûµÄµÚÒ»¸ö×Ö·û
+    // è·å–åˆ°ç»„åçš„ç¬¬ä¸€ä¸ªå­—ç¬¦
     pThis->initGroupName();
     pThis->putGroupName( c );
 
-    // Ìø×ªµ½»ñÈ¡×éÃû×´Ì¬
+    // è·³è½¬åˆ°è·å–ç»„åçŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_GROUP_NAME;
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GETTING_GROUP_NAME ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GETTING_GROUP_NAME å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GETTING_GROUP_NAME ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GETTING_GROUP_NAME å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -688,7 +688,7 @@ bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
 {
-    // ÕıÔÚ¶ÁÈ¡×éÃû
+    // æ­£åœ¨è¯»å–ç»„å
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      isspace ->  EPARSERSTATUS_GOT_GROUP_NAME
@@ -697,7 +697,7 @@ bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Ìø×ªµ½´íÎó×´Ì¬
+        // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect ']' !";
         return false;
@@ -705,42 +705,42 @@ bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
 
     if ( isspace( c ) )
     {
-        // Ìø×ªµ½ÒÑ»ñÈ¡×éÃû×´Ì¬
-        // ´Ë´¦²»µ÷ÓÃ groupBegin£¬µÈµ½¶ÁÈ¡µ½ ']' ºÅºóÔÙµ÷ÓÃ
+        // è·³è½¬åˆ°å·²è·å–ç»„åçŠ¶æ€
+        // æ­¤å¤„ä¸è°ƒç”¨ groupBeginï¼Œç­‰åˆ°è¯»å–åˆ° ']' å·åå†è°ƒç”¨
         pThis->m_parserStatus = EPARSERSTATUS_GOT_GROUP_NAME;
         return true;
     }
 
     if ( ']' == c )
     {
-        // ×éÃû½áÊø£¬µ÷ÓÃ groupBegin
+        // ç»„åç»“æŸï¼Œè°ƒç”¨ groupBegin
         if ( !pThis->groupBegin() )
         {
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
 
-        // Ìø×ªµ½ÆÚ´ı»»ĞĞ·û×´Ì¬
+        // è·³è½¬åˆ°æœŸå¾…æ¢è¡Œç¬¦çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_EXPECT_LINEEND;
         return true;
     }
 
-    // Ìí¼Ó×Ö·ûµ½×éÃû»º³åÇø
+    // æ·»åŠ å­—ç¬¦åˆ°ç»„åç¼“å†²åŒº
     pThis->putGroupName( c );
 
-    // ¼ÌĞøÔÚ¸Ã×´Ì¬
+    // ç»§ç»­åœ¨è¯¥çŠ¶æ€
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GOT_GROUP_NAME ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GOT_GROUP_NAME å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GOT_GROUP_NAME ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GOT_GROUP_NAME å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -748,7 +748,7 @@ bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
 {
-    // ÒÑ»ñµÃ×éÃû£¬ÆÚ´ı ']'
+    // å·²è·å¾—ç»„åï¼ŒæœŸå¾… ']'
     //      "]"     ->  EPARSERSTATUS_EXPECT_LINEEND
     //      isspace ->  
     //      '\n'    ->  EPARSERSTATUS_ERROR
@@ -757,39 +757,39 @@ bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
 
     if ( ']' == c )
     {
-        // ×éÃû½áÊø£¬µ÷ÓÃ groupBegin
+        // ç»„åç»“æŸï¼Œè°ƒç”¨ groupBegin
         if ( !pThis->groupBegin() )
         {
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
 
-        // Ìø×ªµ½ÆÚ´ı»»ĞĞ·û×´Ì¬
+        // è·³è½¬åˆ°æœŸå¾…æ¢è¡Œç¬¦çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_EXPECT_LINEEND;
         return true;
     }
 
     if ( isspace( c ) )
     {
-        // ¼ÌĞøÔÚ¸Ã×´Ì¬
+        // ç»§ç»­åœ¨è¯¥çŠ¶æ€
         return true;
     }
 
-    // Ìø×ªµ½´íÎó×´Ì¬
+    // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_ERROR;
     pThis->m_errInfo = "Expect ']' !";
     return false;
 }
 
 /**
- *  @brief          EPARSERSTATUS_EXPECT_LINEEND ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_EXPECT_LINEEND å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_EXPECT_LINEEND ´¦Àíº¯Êı
+ *  EPARSERSTATUS_EXPECT_LINEEND å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -797,7 +797,7 @@ bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::expectLinefeedHandler( CCfgParser * pThis, char c )
 {
-    // ÆÚ´ı»ñÈ¡ĞĞ½áÎ²
+    // æœŸå¾…è·å–è¡Œç»“å°¾
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
     //      isspace ->  
@@ -806,32 +806,32 @@ bool CCfgParser::expectLinefeedHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Ìø×ªµ½ĞĞÆğÊ¼×´Ì¬
+        // è·³è½¬åˆ°è¡Œèµ·å§‹çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
     if ( isspace( c ) )
     {
-        // ¼ÌĞøÔÚ¸Ã×´Ì¬
+        // ç»§ç»­åœ¨è¯¥çŠ¶æ€
         return true;
     }
 
-    // Ìø×ªµ½´íÎó×´Ì¬
+    // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_ERROR;
     pThis->m_errInfo = "Expect '\\n' !";
     return false;
 }
 
 /**
- *  @brief          EPARSERSTATUS_COMMENT ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_COMMENT å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_COMMENT ´¦Àíº¯Êı
+ *  EPARSERSTATUS_COMMENT å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -839,7 +839,7 @@ bool CCfgParser::expectLinefeedHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::commentHandler( CCfgParser * pThis, char c )
 {
-    // ×¢ÊÍĞĞ
+    // æ³¨é‡Šè¡Œ
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
     //      *       ->  
@@ -847,24 +847,24 @@ bool CCfgParser::commentHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Ìø×ªµ½ĞĞÆğÊ¼×´Ì¬
+        // è·³è½¬åˆ°è¡Œèµ·å§‹çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
-    // ¼ÌĞøÔÚ¸Ã×´Ì¬
+    // ç»§ç»­åœ¨è¯¥çŠ¶æ€
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GETTING_KEYNAME ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GETTING_KEYNAME å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GETTING_KEYNAME ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GETTING_KEYNAME å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -872,7 +872,7 @@ bool CCfgParser::commentHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
 {
-    // ÕıÔÚ»ñÈ¡¼üÃû
+    // æ­£åœ¨è·å–é”®å
     //      '='     ->  EPARSERSTATUS_GOT_EQUAL
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
@@ -880,7 +880,7 @@ bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
 
     if ( '=' == c )
     {
-        // Ìø×ªµ½ÒÑ»ñÈ¡µÈºÅ×´Ì¬
+        // è·³è½¬åˆ°å·²è·å–ç­‰å·çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_GOT_EQUAL;
         return true;
     }
@@ -888,28 +888,28 @@ bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Ìø×ªµ½´íÎó×´Ì¬
+        // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect '=' !";
         return false;
     }
 
-    // ½«µ±Ç°×Ö·ûÌí¼Óµ½¼üÃû»º³åÇøÖĞ
+    // å°†å½“å‰å­—ç¬¦æ·»åŠ åˆ°é”®åç¼“å†²åŒºä¸­
     pThis->putKeyName( c );
 
-    // ¼ÌĞøÔÚ¸Ã×´Ì¬
+    // ç»§ç»­åœ¨è¯¥çŠ¶æ€
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GOT_KEYNAME ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GOT_KEYNAME å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GOT_KEYNAME ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GOT_KEYNAME å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -917,7 +917,7 @@ bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gotKeyNameHandler( CCfgParser * pThis, char c )
 {
-    // ÒÑ¾­»ñÈ¡µ½¼üÃû
+    // å·²ç»è·å–åˆ°é”®å
     //      '='     ->  EPARSERSTATUS_GOT_EQUAL
     //      isspace ->  
     //      '\n'    ->  EPARSERSTATUS_ERROR
@@ -926,32 +926,32 @@ bool CCfgParser::gotKeyNameHandler( CCfgParser * pThis, char c )
 
     if ( '=' == c )
     {
-        // Ìø×ªµ½ÒÑ»ñÈ¡µÈºÅ×´Ì¬
+        // è·³è½¬åˆ°å·²è·å–ç­‰å·çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_GOT_EQUAL;
         return true;
     }
 
     if ( isspace( c ) )
     {
-        // ¼ÌĞøÔÚ¸Ã×´Ì¬
+        // ç»§ç»­åœ¨è¯¥çŠ¶æ€
         return true;
     }
 
-    // Ìø×ªµ½´íÎó×´Ì¬
+    // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_ERROR;
     pThis->m_errInfo = "Expect '=' !";
     return false;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GOT_EQUAL ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GOT_EQUAL å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GOT_EQUAL ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GOT_EQUAL å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -959,7 +959,7 @@ bool CCfgParser::gotKeyNameHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gotEqualHandler( CCfgParser * pThis, char c )
 {
-    // ÒÑ¾­»ñµÃÃûÖµ·Ö¸ô·û
+    // å·²ç»è·å¾—åå€¼åˆ†éš”ç¬¦
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
     //      isspace ->  
@@ -968,42 +968,42 @@ bool CCfgParser::gotEqualHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Êä³ö¼ü
+        // è¾“å‡ºé”®
         if ( !pThis->key() )
         {
-            // Ìø×ªµ½´íÎó×´Ì¬
+            // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
     
-        // Ìø×ªµ½ĞĞÆğÊ¼×´Ì¬
+        // è·³è½¬åˆ°è¡Œèµ·å§‹çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
     if ( isspace( c ) )
     {
-        // ¼ÌĞøÔÚ¸Ã×´Ì¬
+        // ç»§ç»­åœ¨è¯¥çŠ¶æ€
         return true;
     }
 
-    // »ñÈ¡µ½µÚÒ»¸ö¼üÖµ×Ö·û
+    // è·å–åˆ°ç¬¬ä¸€ä¸ªé”®å€¼å­—ç¬¦
     pThis->putKeyValue( c );
 
-    // Ìø×ªµ½»ñÈ¡¼üÖµ×´Ì¬
+    // è·³è½¬åˆ°è·å–é”®å€¼çŠ¶æ€
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_KEYVALUE;
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_GETTING_KEYVALUE ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_GETTING_KEYVALUE å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_GETTING_KEYVALUE ´¦Àíº¯Êı
+ *  EPARSERSTATUS_GETTING_KEYVALUE å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -1011,7 +1011,7 @@ bool CCfgParser::gotEqualHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::gettingKeyValueHandler( CCfgParser * pThis, char c )
 {
-    // ÕıÔÚ»ñÈ¡¼üÖµ
+    // æ­£åœ¨è·å–é”®å€¼
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
     //      *       ->  
@@ -1019,35 +1019,35 @@ bool CCfgParser::gettingKeyValueHandler( CCfgParser * pThis, char c )
     if ( '\n' == c
         || '\0' == c )
     {
-        // Êä³ö¼ü
+        // è¾“å‡ºé”®
         if ( !pThis->key() )
         {
-            // Ìø×ªµ½´íÎó×´Ì¬
+            // è·³è½¬åˆ°é”™è¯¯çŠ¶æ€
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
     
-        // Ìø×ªµ½ĞĞÆğÊ¼×´Ì¬
+        // è·³è½¬åˆ°è¡Œèµ·å§‹çŠ¶æ€
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
-    // »ñÈ¡µ½µÚÒ»¸ö¼üÖµ×Ö·û
+    // è·å–åˆ°ç¬¬ä¸€ä¸ªé”®å€¼å­—ç¬¦
     pThis->putKeyValue( c );
 
-    // ¼ÌĞøÔÚ¸Ã×´Ì¬
+    // ç»§ç»­åœ¨è¯¥çŠ¶æ€
     return true;
 }
 
 /**
- *  @brief          EPARSERSTATUS_ERROR ´¦Àíº¯Êı
+ *  @brief          EPARSERSTATUS_ERROR å¤„ç†å‡½æ•°
  *  @author         huangjun
- *  @param[in]      pThis       ½âÎöÆ÷Ö¸Õë
- *  @param[in]      c           Òª½âÎöµÄ×Ö·û
- *  @return         bool        ÊÇ·ñ³É¹¦
+ *  @param[in]      pThis       è§£æå™¨æŒ‡é’ˆ
+ *  @param[in]      c           è¦è§£æçš„å­—ç¬¦
+ *  @return         bool        æ˜¯å¦æˆåŠŸ
  *  @note           
  *
- *  EPARSERSTATUS_ERROR ´¦Àíº¯Êı
+ *  EPARSERSTATUS_ERROR å¤„ç†å‡½æ•°
  *
  *  @remarks        
  *  @since          2013-6-27
@@ -1055,7 +1055,7 @@ bool CCfgParser::gettingKeyValueHandler( CCfgParser * pThis, char c )
  */
 bool CCfgParser::errorHandler( CCfgParser * pThis, char c )
 {
-    // ½âÎö×´Ì¬´íÎó
+    // è§£æçŠ¶æ€é”™è¯¯
     return false;
 }
 

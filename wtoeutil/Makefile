@@ -34,8 +34,8 @@ CC=gcc
 LD=ld
 
 #compile flags setting
-CPPFLAGS+=-DDEBUG -DUTILLIB -g
-LDFLAGS+=-shared -lboost_system -lboost_thread -lboost_filesystem
+CPPFLAGS+=-fPIC -DDEBUG -DUTILLIB -g -Iinclude/
+LDFLAGS+=-L/usr/lib/x86_64-linux-gnu -shared -lboost_system -lboost_thread -lboost_filesystem
 
 #default rule setting
 %$(EXE_EXTEND): %$(OBJ_EXTEND)
@@ -45,10 +45,10 @@ LDFLAGS+=-shared -lboost_system -lboost_thread -lboost_filesystem
 endif
 
 #source file,obj file and exe file setting
-SRC_FILES=$(shell ls *$(SRC_EXTEND))
+SRC_FILES=$(shell ls src/*$(SRC_EXTEND))
 OBJ_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(OBJ_EXTEND))
 #EXE_FILES=$(SRC_FILES:%$(SRC_EXTEND)=%$(EXE_EXTEND))
-EXE_FILES=libwtoeutil.dll
+EXE_FILES=libwtoeutil.so
 
 #dest setting
 all:$(EXE_FILES)

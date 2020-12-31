@@ -1,4 +1,4 @@
-#include "wtoelib.h"
+#include "wtoelib.hpp"
 #include <iostream>
 void print(std::string str)
 {
