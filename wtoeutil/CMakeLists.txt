@@ -8,5 +8,5 @@ add_library(wtoeutil SHARED ${DIR_SRCS})
 target_link_libraries(wtoeutil boost_system boost_thread boost_filesystem)
 
 aux_source_directory(test DIR_TESTS)
-add_executable(gtest ${DIR_TESTS})
-target_link_libraries(gtest wtoeutil)
+add_executable(wtoeutil_test ${DIR_TESTS})
+target_link_libraries(wtoeutil_test wtoeutil)
