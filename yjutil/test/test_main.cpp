@@ -86,7 +86,7 @@ TEST(TestYjUtil, test_yjfile) {
     std::string filePath("/tmp/testyjutil/");
     std::string fileName("testfile");
     ASSERT_TRUE(fileName == getFileName(filePath + fileName));
-    ASSERT_TRUE(filePath == getFileDirectory(filePath + fileName));
+    ASSERT_TRUE(filePath == getParentDirectory(filePath + fileName));
     ASSERT_FALSE(isFileExist(filePath));
     ASSERT_FALSE(isFileExist(filePath + fileName));
     ASSERT_FALSE(isDirectory(filePath));

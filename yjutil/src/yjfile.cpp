@@ -11,7 +11,7 @@ std::string getFileName(const std::string& filePath) {
     return filePath.substr(filePath.find_last_of("/") + 1, filePath.length());
 }
 
-std::string getFileDirectory(const std::string& filePath) {
+std::string getParentDirectory(const std::string& filePath) {
     return filePath.substr(0, filePath.find_last_of("/") + 1);
 }
 
@@ -42,8 +42,9 @@ bool createFile(const std::string& filePath) {
     int ret = open(filePath.c_str(), O_CREAT);
     if (ret != -1) {
         close(ret);
+        return true;
     }
-    return -1 != ret;
+    return false;
 }
 
 bool removeFile(const std::string& filePath) {
@@ -51,13 +52,13 @@ bool removeFile(const std::string& filePath) {
     return true;
 }
 
-bool createDir(const std::string& dirPath, bool bCreateParent) {
+bool createDir(const std::string& dirPath, bool bRecursion) {
     int ret = true;
-    if (bCreateParent) {
-        if (isFileExist(getFileDirectory(dirPath))) {
+    if (bRecursion) {
+        if (isFileExist(getParentDirectory(dirPath))) {
             ret = ret && createDir(dirPath, false);
         } else {
-            ret = ret && createDir(getFileDirectory(dirPath), true);
+            ret = ret && createDir(getParentDirectory(dirPath), true);
         }
     } else {
         ret = ret && (0 == mkdir(dirPath.c_str(), S_IRWXU));
@@ -82,6 +83,22 @@ bool removeDir(const std::string& dirPath, bool bRecursion) {
     } else {
         ret = ret && (0 == rmdir(dirPath.c_str()));
     }
+    return ret;
+}
+
+bool for_each_file(const std::string& dir, void (*_op)(std::string& file)) {
+    int ret = true;
+    DIR* _dir = opendir(dir.c_str());
+    struct dirent* _file;
+    while(! (_file = readdir(_dir))) {
+        std::string name = _file->d_name;
+        if (_file->d_type == DT_REG) {
+            _op(name);
+        } else if (_file->d_type == DT_DIR) {
+            for_each_file(name, _op);
+        }
+    }
+    closedir(_dir);
     return ret;
 }
 

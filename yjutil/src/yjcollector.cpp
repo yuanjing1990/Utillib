@@ -8,6 +8,7 @@
 #include "yjcollector.h"
 #include "yjcollector_policy.h"
 #include "yjutil.h"
+#include "yjfile.h"
 
 namespace yjutil {
 
@@ -23,8 +24,7 @@ FileCollector::FileCollector(const std::string &strSrcPath,
 FileCollector::~FileCollector() {}
 
 bool FileCollector::isDirExist(const std::string &dir) {
-    boost::filesystem::path path(dir);
-    if (boost::filesystem::is_directory(path)) {
+    if (isDirectory(dir)) {
         return true;
     }
     return false;
