@@ -40,6 +40,8 @@ namespace yjutil
 
     private:
         void handle_client_request(int socket);
+        int accept_client(int socket);
+        int reject_client(int socket);
         void response_to_client(cmd* rep, int socket);
     };
 } // namespace yj

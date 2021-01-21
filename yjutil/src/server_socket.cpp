@@ -5,7 +5,7 @@
 #define MCLIENT 5
 namespace yjutil
 {
-    server_socket::server_socket(uint16_t port) : m_port(port), m_handler(NULL)
+    server_socket::server_socket(uint16_t port) : m_port(port), m_clients(MCLIENT, 0), m_handler(NULL)
     {
     }
 
@@ -13,9 +13,8 @@ namespace yjutil
     {
     }
 
-    void server_socket::start(void*)
+    void server_socket::start(void *)
     {
-        int ret = -1;
         struct sockaddr_in t_sockaddr;
         memset(&t_sockaddr, 0, sizeof(t_sockaddr));
         t_sockaddr.sin_family = AF_INET;
@@ -24,56 +23,87 @@ namespace yjutil
 
         int listen_fd = socket(AF_INET, SOCK_STREAM, 0);
         if (listen_fd < 0)
-        {
             return;
-        }
+
         int opt = 1;
-        int optlen = sizeof(opt);
-        setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, optlen);
-        ret = ::bind(listen_fd, (struct sockaddr *)&t_sockaddr, sizeof(t_sockaddr));
+        setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+        int ret = ::bind(listen_fd, (struct sockaddr *)&t_sockaddr, sizeof(t_sockaddr));
         if (ret < 0)
-        {
             return;
-        }
+
         ret = listen(listen_fd, 1024);
         if (ret < 0)
-        {
             return;
-        }
 
         fd_set readfds;
-        int max_sd;
-        int new_socket, activity, i;
+        int new_socket, i;
         socklen_t addrlen;
         struct sockaddr_in address;
         while (true)
         {
             FD_ZERO(&readfds);
             FD_SET(listen_fd, &readfds);
-            max_sd = listen_fd;
+            int max_sd = std::max(listen_fd, *std::max_element(m_clients.begin(), m_clients.end()));
 
             std::for_each(m_clients.begin(), m_clients.end(), [&](int sd) {
-                FD_SET(sd, &readfds);
-                std::max(max_sd, sd);
+                if (sd > 0)
+                    FD_SET(sd, &readfds);
             });
 
-            activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
+            int activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
             if ((activity < 0) && (errno != EINTR))
                 continue;
 
             if (FD_ISSET(listen_fd, &readfds))
             {
-                if ((new_socket = accept(listen_fd,
-                                         (struct sockaddr *)&address, &addrlen)) < 0)
+                int client_socket = accept(listen_fd,
+                                           (struct sockaddr *)&address, &addrlen);
+                if (client_socket < 0)
                     continue;
 
-                DEBUG_PRINT("client:%d is connect.\n", new_socket);
-                m_clients.size() < MCLIENT ? m_clients.push_back(new_socket) : (void)close(new_socket);
+                accept_client(client_socket);
             }
 
             std::for_each(m_clients.begin(), m_clients.end(), [&](int fd) {
-                FD_ISSET(fd, &readfds) ? handle_client_request(fd) : (void)NULL;
+                if (FD_ISSET(fd, &readfds))
+                    handle_client_request(fd);
             });
+        }
+    }
+
+    int server_socket::accept_client(int client_socket)
+    {
+        auto it = std::find(m_clients.begin(), m_clients.end(), 0);
+        if (it != m_clients.end())
+        {
+            *it = client_socket;
+            std::sort(m_clients.begin(), m_clients.end());
+            printf("Accept client:%d\n", client_socket);
+            return EXIT_SUCCESS;
+        }
+        else
+        {
+            close(client_socket);
+            printf("Client is full,not accept client:%d\n", client_socket);
+            return EXIT_FAILURE;
+        }
+    }
+
+    int server_socket::reject_client(int client_socket)
+    {
+        auto it = std::find(m_clients.begin(), m_clients.end(), 0);
+        if (it != m_clients.end())
+        {
+            *it = 0;
+            std::sort(m_clients.begin(), m_clients.end());
+            close(client_socket);
+            printf("Reject client:%d\n", client_socket);
+            return EXIT_SUCCESS;
+        }
+        else
+        {
+            printf("Client is not connected:%d\n", client_socket);
+            return EXIT_FAILURE;
         }
     }
 
@@ -88,30 +118,23 @@ namespace yjutil
         {
             if (0 == bytereceived)
             {
-                // slog2f(NULL, 0, SLOG2_INFO, "client is shutdown.\n");
-                DEBUG_PRINT("client is shutdown.\n");
+                reject_client(socket);
                 return;
             }
             else
             {
-                // slog2f(NULL, 0, SLOG2_INFO, "recvfrom socket error :: bytereceived = %ld :: ERROR == %s\n", bytereceived, strerror(errno));
-                DEBUG_PRINT("recvfrom socket error :: bytereceived = %ld :: ERROR == %s\n", bytereceived, strerror(errno));
+                printf("Recvfrom client:%d error :: bytereceived = %ld:%s :: ERROR == %s\n", socket, bytereceived, (char*)&rmsg, strerror(errno));
+                // socklen_t addrlen;
+                // struct sockaddr_in address;
+                // getpeername(socket, (struct sockaddr *)&address, &addrlen);
+                // printf("client to disconnect ip:port %s:%d\n",
+                //        inet_ntoa(address.sin_addr), ntohs(address.sin_port));
             }
-            socklen_t addrlen;
-            struct sockaddr_in address;
-            getpeername(socket, (struct sockaddr *)&address, &addrlen);
-            // slog2f(NULL, 0, SLOG2_INFO, "diag_lsm_clientconnect disconnected , ip %s :: port %d",
-            //        inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-            DEBUG_PRINT("diag_lsm_clientconnect disconnected , ip %s :: port %d",
-                   inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-
-            smsg.cmdId = rmsg.cmdId;
-            smsg.ret = -1;
         }
         else
         {
             if (m_handler != NULL)
-            m_handler(&rmsg, &smsg);
+                m_handler(&rmsg, &smsg);
         }
         response_to_client(&smsg, socket);
     }
@@ -120,7 +143,7 @@ namespace yjutil
     {
         send(socket, rep, sizeof(cmd), 0);
     }
-} // namespace yj
+} // namespace yjutil
 
 /*
 #define MCLIENT 5
