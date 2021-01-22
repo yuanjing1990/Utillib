@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(yjtuil)
 
 include_directories(include/)
+add_compile_options(-D_DEBUG)
 
 aux_source_directory(src SRC_DIRS)
 add_library(yjutil SHARED ${SRC_DIRS})
