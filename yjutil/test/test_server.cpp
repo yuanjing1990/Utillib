@@ -1,20 +1,19 @@
 
-#include <gtest/gtest.h>
 #include "yjutil.h"
-
+#include <gtest/gtest.h>
 
 class TestServer : public ::testing::Test {
-    public:
-        TestServer(){}
-        virtual ~TestServer(){}
+  public:
+    TestServer() {}
+    virtual ~TestServer() {}
 
-        virtual void SetUp() {
-            DEBUG_PRINT("SetUp ... ");
-        }
+    virtual void SetUp() {
+        DEBUG_PRINT("SetUp ... ");
+    }
 
-        virtual void TearDown() {
-            DEBUG_PRINT("TearDown ... ");
-        }
+    virtual void TearDown() {
+        DEBUG_PRINT("TearDown ... ");
+    }
 };
 
 TEST_F(TestServer, test_demo) {

@@ -7,8 +7,8 @@
 
 #include "yjcollector.h"
 #include "yjcollector_policy.h"
-#include "yjutil.h"
 #include "yjfile.h"
+#include "yjutil.h"
 
 namespace yjutil {
 

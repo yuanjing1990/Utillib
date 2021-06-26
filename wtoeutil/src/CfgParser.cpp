@@ -8,13 +8,11 @@
  *
  *  配置解析实现文件
  */
+#include "CfgParser.hpp"
 #include <boost/shared_ptr.hpp>
 #include <fstream>
-#include "CfgParser.hpp"
 
-namespace wtoeutil{
-
-
+namespace wtoeutil {
 
 /**
  *  @brief          构造函数
@@ -28,18 +26,7 @@ namespace wtoeutil{
  *  @since          2013-6-27
  *  @see            
  */
-CCfgParser::CCfgParser() : m_spCallBack()
-                            , m_parserStatus(EPARSERSTATUS_LINE_START)
-                            , m_groupName("")
-                            , m_bNeedCallGroupBegin( true )
-                            , m_keyName("")
-                            , m_keyNameSpace("")
-                            , m_keyValue("")
-                            , m_keyValueSpace("")
-                            , m_errInfo("")
-                            , m_line(1)
-                            , m_col(1)
-{
+CCfgParser::CCfgParser() : m_spCallBack(), m_parserStatus(EPARSERSTATUS_LINE_START), m_groupName(""), m_bNeedCallGroupBegin(true), m_keyName(""), m_keyNameSpace(""), m_keyValue(""), m_keyValueSpace(""), m_errInfo(""), m_line(1), m_col(1) {
     m_statusHandlers[EPARSERSTATUS_LINE_START] = lineStartHandler;
     m_statusHandlers[EPARSERSTATUS_GOT_LEFT_SQUARE] = gotLeftSquareHandler;
     m_statusHandlers[EPARSERSTATUS_GETTING_GROUP_NAME] = gettingGroupNameHandler;
@@ -65,8 +52,7 @@ CCfgParser::CCfgParser() : m_spCallBack()
  *  @since          2013-6-27
  *  @see            
  */
-CCfgParser::~CCfgParser()
-{
+CCfgParser::~CCfgParser() {
 }
 
 /**
@@ -82,8 +68,7 @@ CCfgParser::~CCfgParser()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::setCallBack(CSpICfgParserCallBack spCallBack)
-{
+void CCfgParser::setCallBack(CSpICfgParserCallBack spCallBack) {
     m_spCallBack = spCallBack;
 }
 
@@ -100,76 +85,62 @@ void CCfgParser::setCallBack(CSpICfgParserCallBack spCallBack)
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::parse(const std::string & strCfgFilePath)
-{
-    if ( !m_spCallBack )
-    {
+bool CCfgParser::parse(const std::string &strCfgFilePath) {
+    if (!m_spCallBack) {
         m_errInfo = "No call back!";
         return false;
     }
 
-    std::ifstream   ifs;
+    std::ifstream ifs;
 
-    try
-    {
+    try {
         ifs.open(strCfgFilePath.c_str());
-        if ( ifs.fail() )
-        {
+        if (ifs.fail()) {
             m_errInfo = "Open file failed!" + strCfgFilePath;
             return false;
         }
-    }
-    catch ( ... )
-    {
+    } catch (...) {
         m_errInfo = "Open file failed!" + strCfgFilePath;
         return false;
     }
 
-    char            c = '\0';
-    bool            bRet = true;
+    char c = '\0';
+    bool bRet = true;
 
     // 初始化解析器
     initParse();
 
-    while ( !ifs.eof() )
-    {
-        ifs.get( c );
-        if ( ifs.fail() )
-        {
+    while (!ifs.eof()) {
+        ifs.get(c);
+        if (ifs.fail()) {
             // ifstream 在读到最后一个字符后，并不会 eof()
             // 而是在读下一个字符时失败，此时要做判断
             break;
         }
 
         bRet = m_statusHandlers[m_parserStatus](this, c);
-        if ( !bRet )
-        {
+        if (!bRet) {
             break;
         }
 
-        if ( '\n' == c )
-        {
+        if ('\n' == c) {
             // 换行符，增加行号
-            ++ m_line;
+            ++m_line;
             m_col = 1;
-        }
-        else
-        {
+        } else {
             // 增加列号
-            ++ m_col;
+            ++m_col;
         }
     }
 
     ifs.close();
 
-    if ( !bRet )
-    {
+    if (!bRet) {
         return false;
     }
 
     // 最后添加一个结束符，结束处理
-    if ( !m_statusHandlers[m_parserStatus](this, '\0') )
-    {
+    if (!m_statusHandlers[m_parserStatus](this, '\0')) {
         return false;
     }
 
@@ -189,8 +160,7 @@ bool CCfgParser::parse(const std::string & strCfgFilePath)
  *  @since          2013-6-27
  *  @see            
  */
-const std::string & CCfgParser::getErrInfo()
-{
+const std::string &CCfgParser::getErrInfo() {
     return m_errInfo;
 }
 
@@ -206,8 +176,7 @@ const std::string & CCfgParser::getErrInfo()
  *  @since          2013-6-27
  *  @see            
  */
-uint32_t CCfgParser::getErrLine()
-{
+uint32_t CCfgParser::getErrLine() {
     return m_line;
 }
 
@@ -223,11 +192,9 @@ uint32_t CCfgParser::getErrLine()
  *  @since          2013-6-27
  *  @see            
  */
-uint32_t CCfgParser::getErrCol()
-{
+uint32_t CCfgParser::getErrCol() {
     return m_col;
 }
-
 
 /**
  *  @brief          初始化解析
@@ -241,8 +208,7 @@ uint32_t CCfgParser::getErrCol()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::initParse()
-{
+void CCfgParser::initParse() {
     // 初始化解析状态
     m_parserStatus = EPARSERSTATUS_LINE_START;
 
@@ -250,7 +216,7 @@ void CCfgParser::initParse()
     initGroupName();
 
     // 遇到无名组中的键值需调用一次groupBegin
-    m_bNeedCallGroupBegin = true;   
+    m_bNeedCallGroupBegin = true;
 
     // 初始化键名
     initKeyName();
@@ -280,12 +246,10 @@ void CCfgParser::initParse()
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::groupBegin()
-{
-    bool bRet = m_spCallBack->groupBegin( m_groupName );
+bool CCfgParser::groupBegin() {
+    bool bRet = m_spCallBack->groupBegin(m_groupName);
 
-    if ( !bRet )
-    {
+    if (!bRet) {
         m_errInfo = "Call spCallBack->groupBegin( \"" + m_groupName + "\" ) failed!";
         return false;
     }
@@ -308,26 +272,19 @@ bool CCfgParser::groupBegin()
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::key()
-{
-    if ( m_bNeedCallGroupBegin )
-    {
+bool CCfgParser::key() {
+    if (m_bNeedCallGroupBegin) {
         // 该键值为无名组中的第一个键
         // 需要调用一次 groupBegin
-        if ( !groupBegin() )
-        {
+        if (!groupBegin()) {
             return false;
         }
     }
 
     bool bRet = m_spCallBack->key(m_groupName, m_keyName, m_keyValue);
-    
-    if ( !bRet )
-    {
-        m_errInfo = "Call spCallBack->key( \""
-                        + m_groupName + "\", \""
-                        + m_keyName + "\", \""
-                        + m_keyValue + "\" ) failed!";
+
+    if (!bRet) {
+        m_errInfo = "Call spCallBack->key( \"" + m_groupName + "\", \"" + m_keyName + "\", \"" + m_keyValue + "\" ) failed!";
         return false;
     }
 
@@ -346,8 +303,7 @@ bool CCfgParser::key()
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::groupEnd()
-{
+bool CCfgParser::groupEnd() {
     // 不再判断组名是否存在
 #if 0
     if ( m_groupName.empty() )
@@ -356,16 +312,14 @@ bool CCfgParser::groupEnd()
     }
 #endif
 
-    if ( m_bNeedCallGroupBegin )
-    {
+    if (m_bNeedCallGroupBegin) {
         // 还没有调用过 groupBegin，此时不用调用 groupEnd
         return true;
     }
 
-    bool bRet = m_spCallBack->groupEnd( m_groupName );
+    bool bRet = m_spCallBack->groupEnd(m_groupName);
 
-    if ( !bRet )
-    {
+    if (!bRet) {
         m_errInfo = "Call spCallBack->groupEnd( \"" + m_groupName + "\" ) failed!";
         return false;
     }
@@ -385,8 +339,7 @@ bool CCfgParser::groupEnd()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::initGroupName()
-{
+void CCfgParser::initGroupName() {
     m_groupName = "";
 }
 
@@ -403,8 +356,7 @@ void CCfgParser::initGroupName()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::putGroupName(char c)
-{
+void CCfgParser::putGroupName(char c) {
     m_groupName += c;
 }
 
@@ -420,8 +372,7 @@ void CCfgParser::putGroupName(char c)
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::initKeyName()
-{
+void CCfgParser::initKeyName() {
     m_keyName = "";
     m_keyNameSpace = "";
 }
@@ -439,15 +390,11 @@ void CCfgParser::initKeyName()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::putKeyName(char c)
-{
-    if ( isspace( c ) )
-    {
+void CCfgParser::putKeyName(char c) {
+    if (isspace(c)) {
         // 输出到空格缓冲区
         m_keyNameSpace += c;
-    }
-    else
-    {
+    } else {
         // 将空格缓冲区的内容添加到 name 尾部
         m_keyName += m_keyNameSpace;
 
@@ -471,8 +418,7 @@ void CCfgParser::putKeyName(char c)
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::initKeyValue()
-{
+void CCfgParser::initKeyValue() {
     m_keyValue = "";
     m_keyValueSpace = "";
 }
@@ -490,15 +436,11 @@ void CCfgParser::initKeyValue()
  *  @since          2013-6-27
  *  @see            
  */
-void CCfgParser::putKeyValue(char c)
-{
-    if ( isspace( c ) )
-    {
+void CCfgParser::putKeyValue(char c) {
+    if (isspace(c)) {
         // 输出到空格缓冲区
         m_keyValueSpace += c;
-    }
-    else
-    {
+    } else {
         // 将空格缓冲区的内容添加到 value 尾部
         m_keyValue += m_keyValueSpace;
 
@@ -509,8 +451,6 @@ void CCfgParser::putKeyValue(char c)
         m_keyValue += c;
     }
 }
-
-
 
 /**
  *  @brief          是否为空格
@@ -525,20 +465,13 @@ void CCfgParser::putKeyValue(char c)
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::isspace(char c)
-{
-    if ( ' ' == c
-        || '\t' == c
-        || '\r' == c )
-    {
+bool CCfgParser::isspace(char c) {
+    if (' ' == c || '\t' == c || '\r' == c) {
         return true;
     }
 
     return false;
 }
-
-
-
 
 /**
  *  @brief          EPARSERSTATUS_LINE_START 处理函数
@@ -554,37 +487,30 @@ bool CCfgParser::isspace(char c)
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::lineStartHandler(CCfgParser *pThis, char c) {
     // 行开始
-    //      '\n'    ->  
-    //      '\0'    ->  
-    //      isspace ->  
+    //      '\n'    ->
+    //      '\0'    ->
+    //      isspace ->
     //      '#'     ->  EPARSERSTATUS_COMMENT
     //      '['     ->  EPARSERSTATUS_GOT_LEFT_SQUARE
     //      '='     ->  EPARSERSTATUS_ERROR
     //      *       ->  EPARSERSTATUS_GETTING_KEYNAME
 
-    if ( '\n' == c
-        || '\0' == c
-        || isspace( c ) )
-    {
+    if ('\n' == c || '\0' == c || isspace(c)) {
         // 不改变状态
         return true;
     }
 
-    if ( '#' == c )
-    {
+    if ('#' == c) {
         // 跳到获取注释状态
         pThis->m_parserStatus = EPARSERSTATUS_COMMENT;
         return true;
     }
 
-    if ( '[' == c )
-    {
+    if ('[' == c) {
         // 将上一个组结束掉
-        if ( !pThis->groupEnd() )
-        {
+        if (!pThis->groupEnd()) {
             // 跳转到错误状态
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
@@ -595,8 +521,7 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
         return true;
     }
 
-    if ( '=' == c )
-    {
+    if ('=' == c) {
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "No item name!";
         return false;
@@ -616,7 +541,7 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
     // 获取到键名的第一个字符
     pThis->initKeyName();
     pThis->initKeyValue();
-    pThis->putKeyName( c );
+    pThis->putKeyName(c);
 
     // 跳转到获取键名状态
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_KEYNAME;
@@ -637,27 +562,22 @@ bool CCfgParser::lineStartHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gotLeftSquareHandler(CCfgParser *pThis, char c) {
     // 获取到了 '['
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      ']'     ->  EPARSERSTATUS_ERROR
-    //      isspace ->  
+    //      isspace ->
     //      *       ->  EPARSERSTATUS_GETTING_GROUP_NAME
 
-    if ( '\n' == c
-        || '\0' == c
-        || ']' == c)
-    {
+    if ('\n' == c || '\0' == c || ']' == c) {
         // 跳转到错误状态
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect group name!";
         return false;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 继续在该状态
         // 等待组名的第一个字符
         return true;
@@ -665,7 +585,7 @@ bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
 
     // 获取到组名的第一个字符
     pThis->initGroupName();
-    pThis->putGroupName( c );
+    pThis->putGroupName(c);
 
     // 跳转到获取组名状态
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_GROUP_NAME;
@@ -686,36 +606,30 @@ bool CCfgParser::gotLeftSquareHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gettingGroupNameHandler(CCfgParser *pThis, char c) {
     // 正在读取组名
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      isspace ->  EPARSERSTATUS_GOT_GROUP_NAME
     //      "]"     ->  EPARSERSTATUS_EXPECT_LINEEND
-    //      *       ->  
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    //      *       ->
+    if ('\n' == c || '\0' == c) {
         // 跳转到错误状态
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect ']' !";
         return false;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 跳转到已获取组名状态
         // 此处不调用 groupBegin，等到读取到 ']' 号后再调用
         pThis->m_parserStatus = EPARSERSTATUS_GOT_GROUP_NAME;
         return true;
     }
 
-    if ( ']' == c )
-    {
+    if (']' == c) {
         // 组名结束，调用 groupBegin
-        if ( !pThis->groupBegin() )
-        {
+        if (!pThis->groupBegin()) {
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
@@ -726,7 +640,7 @@ bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
     }
 
     // 添加字符到组名缓冲区
-    pThis->putGroupName( c );
+    pThis->putGroupName(c);
 
     // 继续在该状态
     return true;
@@ -746,20 +660,17 @@ bool CCfgParser::gettingGroupNameHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gotGroupNameHandler(CCfgParser *pThis, char c) {
     // 已获得组名，期待 ']'
     //      "]"     ->  EPARSERSTATUS_EXPECT_LINEEND
-    //      isspace ->  
+    //      isspace ->
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      *       ->  EPARSERSTATUS_ERROR
 
-    if ( ']' == c )
-    {
+    if (']' == c) {
         // 组名结束，调用 groupBegin
-        if ( !pThis->groupBegin() )
-        {
+        if (!pThis->groupBegin()) {
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
@@ -769,8 +680,7 @@ bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
         return true;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 继续在该状态
         return true;
     }
@@ -795,24 +705,20 @@ bool CCfgParser::gotGroupNameHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::expectLinefeedHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::expectLinefeedHandler(CCfgParser *pThis, char c) {
     // 期待获取行结尾
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
-    //      isspace ->  
+    //      isspace ->
     //      *       ->  EPARSERSTATUS_ERROR
 
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    if ('\n' == c || '\0' == c) {
         // 跳转到行起始状态
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 继续在该状态
         return true;
     }
@@ -837,16 +743,13 @@ bool CCfgParser::expectLinefeedHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::commentHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::commentHandler(CCfgParser *pThis, char c) {
     // 注释行
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
-    //      *       ->  
+    //      *       ->
 
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    if ('\n' == c || '\0' == c) {
         // 跳转到行起始状态
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
@@ -870,24 +773,20 @@ bool CCfgParser::commentHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gettingKeyNameHandler(CCfgParser *pThis, char c) {
     // 正在获取键名
     //      '='     ->  EPARSERSTATUS_GOT_EQUAL
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
-    //      *       ->  
+    //      *       ->
 
-    if ( '=' == c )
-    {
+    if ('=' == c) {
         // 跳转到已获取等号状态
         pThis->m_parserStatus = EPARSERSTATUS_GOT_EQUAL;
         return true;
     }
 
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    if ('\n' == c || '\0' == c) {
         // 跳转到错误状态
         pThis->m_parserStatus = EPARSERSTATUS_ERROR;
         pThis->m_errInfo = "Expect '=' !";
@@ -895,7 +794,7 @@ bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
     }
 
     // 将当前字符添加到键名缓冲区中
-    pThis->putKeyName( c );
+    pThis->putKeyName(c);
 
     // 继续在该状态
     return true;
@@ -915,24 +814,21 @@ bool CCfgParser::gettingKeyNameHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gotKeyNameHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gotKeyNameHandler(CCfgParser *pThis, char c) {
     // 已经获取到键名
     //      '='     ->  EPARSERSTATUS_GOT_EQUAL
-    //      isspace ->  
+    //      isspace ->
     //      '\n'    ->  EPARSERSTATUS_ERROR
     //      '\0'    ->  EPARSERSTATUS_ERROR
     //      *       ->  EPARSERSTATUS_ERROR
 
-    if ( '=' == c )
-    {
+    if ('=' == c) {
         // 跳转到已获取等号状态
         pThis->m_parserStatus = EPARSERSTATUS_GOT_EQUAL;
         return true;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 继续在该状态
         return true;
     }
@@ -957,38 +853,33 @@ bool CCfgParser::gotKeyNameHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gotEqualHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gotEqualHandler(CCfgParser *pThis, char c) {
     // 已经获得名值分隔符
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
-    //      isspace ->  
+    //      isspace ->
     //      *       ->  EPARSERSTATUS_GETTING_KEYVALUE
 
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    if ('\n' == c || '\0' == c) {
         // 输出键
-        if ( !pThis->key() )
-        {
+        if (!pThis->key()) {
             // 跳转到错误状态
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
-    
+
         // 跳转到行起始状态
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
-    if ( isspace( c ) )
-    {
+    if (isspace(c)) {
         // 继续在该状态
         return true;
     }
 
     // 获取到第一个键值字符
-    pThis->putKeyValue( c );
+    pThis->putKeyValue(c);
 
     // 跳转到获取键值状态
     pThis->m_parserStatus = EPARSERSTATUS_GETTING_KEYVALUE;
@@ -1009,31 +900,27 @@ bool CCfgParser::gotEqualHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::gettingKeyValueHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::gettingKeyValueHandler(CCfgParser *pThis, char c) {
     // 正在获取键值
     //      '\n'    ->  EPARSERSTATUS_LINE_START
     //      '\0'    ->  EPARSERSTATUS_LINE_START
-    //      *       ->  
+    //      *       ->
 
-    if ( '\n' == c
-        || '\0' == c )
-    {
+    if ('\n' == c || '\0' == c) {
         // 输出键
-        if ( !pThis->key() )
-        {
+        if (!pThis->key()) {
             // 跳转到错误状态
             pThis->m_parserStatus = EPARSERSTATUS_ERROR;
             return false;
         }
-    
+
         // 跳转到行起始状态
         pThis->m_parserStatus = EPARSERSTATUS_LINE_START;
         return true;
     }
 
     // 获取到第一个键值字符
-    pThis->putKeyValue( c );
+    pThis->putKeyValue(c);
 
     // 继续在该状态
     return true;
@@ -1053,14 +940,9 @@ bool CCfgParser::gettingKeyValueHandler( CCfgParser * pThis, char c )
  *  @since          2013-6-27
  *  @see            
  */
-bool CCfgParser::errorHandler( CCfgParser * pThis, char c )
-{
+bool CCfgParser::errorHandler(CCfgParser *pThis, char c) {
     // 解析状态错误
     return false;
 }
 
-
-
-}
-
-
+} // namespace wtoeutil

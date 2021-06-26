@@ -69,7 +69,7 @@ struct _Tick {
 template <class T>
 void print(const T &vec) {
     using namespace std;
-	std::copy(vec.begin(), vec.end(), std::ostream_iterator<typename T::value_type>(cout, " "));
+    std::copy(vec.begin(), vec.end(), std::ostream_iterator<typename T::value_type>(cout, " "));
     cout << endl;
 }
 

@@ -16,22 +16,22 @@ using namespace boost::filesystem;
 static std::string sSrcPath = "/tmp/testyjutil/";
 static std::string sDestPath = "/tmp/testyjutil/copy_to/";
 class TestCollector : public ::testing::Test {
-    public:
-        TestCollector(){}
-        virtual ~TestCollector(){}
+  public:
+    TestCollector() {}
+    virtual ~TestCollector() {}
 
-        virtual void SetUp() {
-            DEBUG_PRINT("SetUp ... ");
-            boost::filesystem::create_directories(sSrcPath);
-            std::ofstream ofs(sSrcPath + "testfile.txt");
-            ofs << "test";
-            ofs.close();
-        }
+    virtual void SetUp() {
+        DEBUG_PRINT("SetUp ... ");
+        boost::filesystem::create_directories(sSrcPath);
+        std::ofstream ofs(sSrcPath + "testfile.txt");
+        ofs << "test";
+        ofs.close();
+    }
 
-        virtual void TearDown() {
-            DEBUG_PRINT("TearDown ... ");
-            boost::filesystem::remove_all(sSrcPath);
-        }
+    virtual void TearDown() {
+        DEBUG_PRINT("TearDown ... ");
+        boost::filesystem::remove_all(sSrcPath);
+    }
 };
 
 TEST_F(TestCollector, test_rename_policy) {

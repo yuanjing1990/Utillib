@@ -13,4 +13,4 @@
 *.la
 *.a
 
-wtoeutil/build/*
+build/*

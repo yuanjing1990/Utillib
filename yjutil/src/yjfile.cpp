@@ -1,21 +1,21 @@
 #include "yjfile.h"
+#include <dirent.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <dirent.h>
-#include <fcntl.h>
 
 namespace yjutil {
 
-std::string getFileName(const std::string& filePath) {
+std::string getFileName(const std::string &filePath) {
     return filePath.substr(filePath.find_last_of("/") + 1, filePath.length());
 }
 
-std::string getParentDirectory(const std::string& filePath) {
+std::string getParentDirectory(const std::string &filePath) {
     return filePath.substr(0, filePath.find_last_of("/") + 1);
 }
 
-bool isDirectory(const std::string& filePath) {
+bool isDirectory(const std::string &filePath) {
     struct stat s_buf;
     if (0 != stat(filePath.c_str(), &s_buf)) {
         // 目录路径不存在
@@ -24,7 +24,7 @@ bool isDirectory(const std::string& filePath) {
     return S_ISDIR(s_buf.st_mode);
 }
 
-bool isFile(const std::string& filePath) {
+bool isFile(const std::string &filePath) {
     struct stat s_buf;
     if (0 != stat(filePath.c_str(), &s_buf)) {
         // 文件路径不存在
@@ -33,12 +33,12 @@ bool isFile(const std::string& filePath) {
     return S_ISREG(s_buf.st_mode);
 }
 
-bool isFileExist(const std::string& filePath) {
+bool isFileExist(const std::string &filePath) {
     struct stat s_buf;
     return 0 == stat(filePath.c_str(), &s_buf);
 }
 
-bool createFile(const std::string& filePath) {
+bool createFile(const std::string &filePath) {
     int ret = open(filePath.c_str(), O_CREAT);
     if (ret != -1) {
         close(ret);
@@ -47,12 +47,12 @@ bool createFile(const std::string& filePath) {
     return false;
 }
 
-bool removeFile(const std::string& filePath) {
+bool removeFile(const std::string &filePath) {
     unlink(filePath.c_str());
     return true;
 }
 
-bool createDir(const std::string& dirPath, bool bRecursion) {
+bool createDir(const std::string &dirPath, bool bRecursion) {
     int ret = true;
     if (bRecursion) {
         if (isFileExist(getParentDirectory(dirPath))) {
@@ -66,12 +66,12 @@ bool createDir(const std::string& dirPath, bool bRecursion) {
     return ret;
 }
 
-bool removeDir(const std::string& dirPath, bool bRecursion) {
+bool removeDir(const std::string &dirPath, bool bRecursion) {
     int ret = true;
     if (bRecursion) {
-        DIR* dir = opendir(dirPath.c_str());
-        struct dirent* file;
-        while(! (file = readdir(dir))) {
+        DIR *dir = opendir(dirPath.c_str());
+        struct dirent *file;
+        while (!(file = readdir(dir))) {
             if (file->d_type == DT_REG) {
                 removeFile(file->d_name);
             } else if (file->d_type == DT_DIR) {
@@ -86,11 +86,11 @@ bool removeDir(const std::string& dirPath, bool bRecursion) {
     return ret;
 }
 
-bool for_each_file(const std::string& dir, void (*_op)(std::string& file)) {
+bool for_each_file(const std::string &dir, void (*_op)(std::string &file)) {
     int ret = true;
-    DIR* _dir = opendir(dir.c_str());
-    struct dirent* _file;
-    while(! (_file = readdir(_dir))) {
+    DIR *_dir = opendir(dir.c_str());
+    struct dirent *_file;
+    while (!(_file = readdir(_dir))) {
         std::string name = _file->d_name;
         if (_file->d_type == DT_REG) {
             _op(name);
@@ -102,4 +102,4 @@ bool for_each_file(const std::string& dir, void (*_op)(std::string& file)) {
     return ret;
 }
 
-}
+} // namespace yjutil

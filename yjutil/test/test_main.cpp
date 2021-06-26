@@ -5,9 +5,9 @@
 #include "crypt.h"
 #include "fcntl.h"
 #include "unistd.h"
+#include "yjfile.h"
 #include "yjutil.h"
 #include "zlib.h"
-#include "yjfile.h"
 
 // void test_yjdef();
 // void test_yjlog();
