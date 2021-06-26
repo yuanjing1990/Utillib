@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.LINUX": "makefile",
+        "*.WIN32": "makefile",
+        "thread": "cpp"
+    }
+}

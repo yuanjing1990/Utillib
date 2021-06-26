@@ -50,7 +50,7 @@ void CCfgManager::loadCfg(std::map<std::string, std::vector<SParaKeyValue>> &con
         return;
     }
 
-    m_cfgParser.setCallBack(boost::dynamic_pointer_cast<ICfgParserCallBack>(shared_from_this()));
+    m_cfgParser.setCallBack(shared_from_this());
 
     std::set<std::string>::iterator it = m_filename.begin();
     for (; it != m_filename.end(); it++) {

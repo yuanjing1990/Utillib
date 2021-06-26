@@ -13,6 +13,9 @@
 #define CFGPARSER_HPP_
 
 #include "utildef.hpp"
+#include <memory>
+#include <stdint.h>
+#include <string>
 
 namespace wtoeutil {
 
@@ -56,7 +59,7 @@ interface UTIL_EXPORT ICfgParserCallBack {
     virtual bool groupEnd(const std::string &strGroupName) = 0;
 };
 
-typedef boost::shared_ptr<ICfgParserCallBack> CSpICfgParserCallBack;
+typedef std::shared_ptr<ICfgParserCallBack> CSpICfgParserCallBack;
 
 /**
  *  @class          mvd.CCfgParser

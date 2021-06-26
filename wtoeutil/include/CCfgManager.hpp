@@ -3,7 +3,6 @@
 
 #include "CfgParser.hpp"
 #include "utildef.hpp"
-#include <boost/enable_shared_from_this.hpp>
 #include <map>
 #include <set>
 #include <string>
@@ -26,7 +25,7 @@ struct SParaKeyValue {
 
 namespace wtoeutil {
 
-class UTIL_EXPORT CCfgManager : public ICfgParserCallBack, public boost::enable_shared_from_this<CCfgManager> {
+class UTIL_EXPORT CCfgManager : public ICfgParserCallBack, public std::enable_shared_from_this<CCfgManager> {
   public:
     /** @brief      构造函数
      */

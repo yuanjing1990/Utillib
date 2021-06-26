@@ -1,9 +1,15 @@
 #include "wtoelib.hpp"
+#include <gtest/gtest.h>
 #include <iostream>
 void print(std::string str) {
     std::cout << str << std::endl;
 }
 int main(int argc, char *argv[]) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+
+TEST(test, md5) {
     std::cout << "MD5 test-------------------\n";
     wtoeutil::MD5 md5("12345", 6);
     std::cout << "seed 12345===>";
@@ -17,7 +23,9 @@ int main(int argc, char *argv[]) {
     std::cout << "seed 12345===>";
     std::cout << md5.toString() << std::endl;
     std::cout << "MD5 test-------------------\n";
+}
 
+TEST(test, filesystem) {
     std::cout << "FileSystem test-------------------\n";
     std::string dir(".");
     std::string parentDir;
@@ -39,9 +47,11 @@ int main(int argc, char *argv[]) {
     wtoeutil::getDirFileEntry(fileset, dir);
     std::for_each(fileset.begin(), fileset.end(), print);
     std::cout << "FileSystem test-------------------\n";
+}
 
+TEST(test, cfgparse) {
     std::cout << "CfgParser test-------------------\n";
-    boost::shared_ptr<wtoeutil::CCfgManager> mgr = boost::make_shared<wtoeutil::CCfgManager>();
+    std::shared_ptr<wtoeutil::CCfgManager> mgr = std::make_shared<wtoeutil::CCfgManager>();
     mgr->setCfgFileBasePath("./");
     std::set<std::string> files;
     files.insert("test.cfg");

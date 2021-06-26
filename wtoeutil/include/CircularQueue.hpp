@@ -1,8 +1,9 @@
 #ifndef CIRCULARQUEUE_HPP_
 #define CIRCULARQUEUE_HPP_
 
-#include <boost/thread.hpp>
+#include <condition_variable>
 #include <iostream>
+#include <mutex>
 
 #include "utildef.hpp"
 
@@ -63,8 +64,8 @@ class UTIL_EXPORT CCircularQueue {
     uint32_t m_read_ptr;
     bool m_iswork;
     uint8_t m_curstatus; //0空 1正常 2满
-    boost::mutex m_mutex;
-    boost::condition_variable_any m_cond;
+    std::mutex m_mutex;
+    std::condition_variable_any m_cond;
 };
 
 } // namespace wtoeutil

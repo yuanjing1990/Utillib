@@ -13,4 +13,14 @@
 
 #define interface struct
 
-#endif
+/**
+ * Macro for print debug info
+ * @see DEBUG_PRINT
+ */
+#ifdef _DEBUG
+#define DEBUG_PRINT(format, ...) printf(format "\n", ##__VA_ARGS__)
+#else
+#define DEBUG_PRINT(format, ...)
+#endif //_DEBUG
+
+#endif // UTILDEF_H_

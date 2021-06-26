@@ -1,8 +1,11 @@
 #include "CircularQueue.hpp"
+#include <chrono>
+#include <memory.h>
+#include <thread>
 
 namespace wtoeutil {
 CCircularQueue::CCircularQueue()
-    : m_buf(NULL), m_bufcapacity(0), m_write_ptr(0), m_read_ptr(0), m_iswork(false), m_curstatus(0) {
+    : m_buf(nullptr), m_bufcapacity(0), m_write_ptr(0), m_read_ptr(0), m_iswork(false), m_curstatus(0) {
 }
 
 CCircularQueue::~CCircularQueue() {
@@ -13,24 +16,16 @@ bool CCircularQueue::init(uint32_t len) {
         return false;
     }
 
-    boost::mutex::scoped_lock lock(m_mutex);
-    if (0 == m_buf) {
-        //m_buf = (uint8_t*)av_mallocz(sizeof(uint8_t) * len);
-        //m_buf = new_a( uint8_t, sizeof(uint8_t) * len );
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (m_buf == nullptr) {
         m_buf = new uint8_t[len];
     } else if (len != m_bufcapacity) {
-        //av_free( m_buf );
-        //delete_a( m_buf );
         delete[] m_buf;
-
-        m_buf = NULL;
-
-        //m_buf = (uint8_t*)av_mallocz(sizeof(uint8_t) * len);
-        //m_buf = new_a( uint8_t, sizeof(uint8_t) * len );
+        m_buf = nullptr;
         m_buf = new uint8_t[len];
     }
 
-    if (0 == m_buf) {
+    if (m_buf == nullptr) {
         return false;
     }
 
@@ -45,7 +40,7 @@ bool CCircularQueue::init(uint32_t len) {
 
 void CCircularQueue::fini() {
     {
-        boost::mutex::scoped_lock lock(m_mutex);
+        std::lock_guard<std::mutex> lock(m_mutex);
 
         m_iswork = false;
         m_curstatus = 0;
@@ -57,24 +52,21 @@ void CCircularQueue::fini() {
     m_read_ptr = m_write_ptr = 0;
 
     if (m_buf) {
-        //av_free( m_buf );
-        //delete_a( m_buf );
         delete[] m_buf;
-
-        m_buf = NULL;
+        m_buf = nullptr;
     }
 }
 
 int32_t CCircularQueue::pushdata(uint8_t *buf, uint32_t len) {
     {
-        boost::mutex::scoped_lock lock(m_mutex);
+        std::lock_guard<std::mutex> lock(m_mutex);
 
         if (!m_buf || !m_iswork) {
             return 0;
         }
 
         if (m_curstatus == 2) {
-            //std::cout << "CCircularQueue pushdata overflow0..." << std::endl;
+            DEBUG_PRINT("CCircularQueue pushdata overflow0...");
             return -2;
         }
 
@@ -83,7 +75,7 @@ int32_t CCircularQueue::pushdata(uint8_t *buf, uint32_t len) {
         if ((m_write_ptr + len) > m_bufcapacity) {
             // 超出尾部,且空间不足.
             if (m_write_ptr + len - m_bufcapacity > m_read_ptr) {
-                //std::cout << "CCircularQueue pushdata overflow1..." << std::endl;
+                DEBUG_PRINT("CCircularQueue pushdata overflow1...");
                 return -2;
             }
             // 超出尾部,且空间足够.
@@ -111,16 +103,16 @@ int32_t CCircularQueue::pushdata(uint8_t *buf, uint32_t len) {
 }
 
 int32_t CCircularQueue::popdata(uint8_t *buf, uint32_t len) {
-    boost::mutex::scoped_lock lock(m_mutex);
+    std::lock_guard<std::mutex> lock(m_mutex);
 
     if (!m_buf || !m_iswork) {
         return -1;
     }
 
     if (m_write_ptr == m_read_ptr && m_curstatus != 2) {
-        //if ( !m_cond.timed_wait( lock,boost::get_system_time() + boost::posix_time::milliseconds( 100 ) ) )
-        if (!m_cond.timed_wait(lock, boost::posix_time::milliseconds(100))) {
+        if (m_cond.wait_for(m_mutex, std::chrono::milliseconds(100)) == std::cv_status::timeout) {
             // 等待.
+            return -1;
         }
         if (false == m_iswork) {
             return -1;
@@ -175,7 +167,7 @@ int32_t CCircularQueue::popdata(uint8_t *buf, uint32_t len) {
 
 void CCircularQueue::reset(bool stopwork) {
     {
-        boost::mutex::scoped_lock lock(m_mutex);
+        std::lock_guard<std::mutex> lock(m_mutex);
         if (stopwork) {
             m_iswork = false;
         }
@@ -187,7 +179,7 @@ void CCircularQueue::reset(bool stopwork) {
 }
 
 uint32_t CCircularQueue::getsize() {
-    boost::mutex::scoped_lock lock(m_mutex);
+    std::lock_guard<std::mutex> lock(m_mutex);
 
     if (m_curstatus == 2)
         return m_bufcapacity;
