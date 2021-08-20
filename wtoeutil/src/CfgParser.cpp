@@ -9,7 +9,6 @@
  *  配置解析实现文件
  */
 #include "CfgParser.hpp"
-#include <boost/shared_ptr.hpp>
 #include <fstream>
 
 namespace wtoeutil {

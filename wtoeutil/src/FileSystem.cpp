@@ -1,30 +1,28 @@
 
-#include <iostream>
-#include <stdio.h>
-
 #include "FileSystem.hpp"
+#include <vector>
 
 namespace wtoeutil {
 
 bool getDirFileEntry(std::set<std::string> &fileEntrys, const std::string &dir) {
-    boost::filesystem::path p(dir);
-    std::vector<boost::filesystem::directory_entry> v;
+    std::filesystem::path p(dir);
+    std::vector<std::filesystem::directory_entry> v;
     fileEntrys.clear();
     try {
         /*
          * Throws: filesystem_error;
          * or
          * boost::system::error_code ec;
-         * boost::filesystem::is_directory( p, ec );
+         * std::filesystem::is_directory( p, ec );
          */
-        if (!boost::filesystem::is_directory(p)) {
+        if (!std::filesystem::is_directory(p)) {
             return false;
         }
-        std::copy(boost::filesystem::directory_iterator(p), boost::filesystem::directory_iterator(), std::back_inserter(v));
-        std::vector<boost::filesystem::directory_entry>::const_iterator it(v.begin());
-        std::vector<boost::filesystem::directory_entry>::const_iterator end(v.end());
+        std::copy(std::filesystem::directory_iterator(p), std::filesystem::directory_iterator(), std::back_inserter(v));
+        std::vector<std::filesystem::directory_entry>::const_iterator it(v.begin());
+        std::vector<std::filesystem::directory_entry>::const_iterator end(v.end());
         for (; it != end; ++it) {
-            if (!boost::filesystem::is_regular_file(it->path()))
+            if (!std::filesystem::is_regular_file(it->path()))
                 continue;
             /*
             tmpPath.filename() << std::endl; // 文件名全部,如[abc.txt]
@@ -36,7 +34,7 @@ bool getDirFileEntry(std::set<std::string> &fileEntrys, const std::string &dir) 
             fileEntrys.insert(str);
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*getDirFileEntry catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*getDirFileEntry catch unknown\n";
@@ -46,17 +44,17 @@ bool getDirFileEntry(std::set<std::string> &fileEntrys, const std::string &dir) 
 }
 
 bool removeRegularFile(const std::string &filePathName) {
-    boost::filesystem::path p(filePathName);
+    std::filesystem::path p(filePathName);
     try {
-        if (!boost::filesystem::is_regular_file(p)) // 判断是文件
+        if (!std::filesystem::is_regular_file(p)) // 判断是文件
         {
             return false;
         }
-        if (!boost::filesystem::remove(p)) {
+        if (!std::filesystem::remove(p)) {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*removeRegularFile catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*removeRegularFile catch unknown\n";
@@ -73,13 +71,13 @@ bool createRegularFile(const std::string &filePathName) {
 }
 
 bool createDirectory(const std::string &dirPathName) {
-    boost::filesystem::path p(dirPathName);
+    std::filesystem::path p(dirPathName);
     try {
-        if (!boost::filesystem::create_directory(p)) {
+        if (!std::filesystem::create_directory(p)) {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*createDirectory catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*createDirectory catch unknown\n";
@@ -88,13 +86,13 @@ bool createDirectory(const std::string &dirPathName) {
 }
 
 bool createDirectories(const std::string &dirPathNames) {
-    boost::filesystem::path p(dirPathNames);
+    std::filesystem::path p(dirPathNames);
     try {
-        if (!boost::filesystem::create_directories(p)) {
+        if (!std::filesystem::create_directories(p)) {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*createDirectories catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*createDirectories catch unknown\n";
@@ -103,17 +101,17 @@ bool createDirectories(const std::string &dirPathNames) {
 }
 
 bool removeDirectory(const std::string &dirPathName) {
-    boost::filesystem::path p(dirPathName);
+    std::filesystem::path p(dirPathName);
     try {
-        if (!boost::filesystem::is_directory(p)) // 判断是目录,否则都可以删除
+        if (!std::filesystem::is_directory(p)) // 判断是目录,否则都可以删除
         {
             return false;
         }
-        if (!boost::filesystem::remove(p)) {
+        if (!std::filesystem::remove(p)) {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*removeDirectory catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*removeDirectory catch unknown\n";
@@ -122,19 +120,19 @@ bool removeDirectory(const std::string &dirPathName) {
 }
 
 bool removeDirectoryAll(const std::string &dirPathName) {
-    boost::filesystem::path p(dirPathName);
+    std::filesystem::path p(dirPathName);
     try {
-        if (!boost::filesystem::is_directory(p)) // 判断是目录,否则都可以删除
+        if (!std::filesystem::is_directory(p)) // 判断是目录,否则都可以删除
         {
             return false;
         }
         // The number of files removed
-        boost::uintmax_t t = boost::filesystem::remove_all(p);
+        std::uintmax_t t = std::filesystem::remove_all(p);
         if (t == 0) {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*removeDirectoryAll catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*removeDirectoryAll catch unknown\n";
@@ -143,14 +141,14 @@ bool removeDirectoryAll(const std::string &dirPathName) {
 }
 
 bool isExistRegularFile(const std::string &filePathName) {
-    boost::filesystem::path p(filePathName);
+    std::filesystem::path p(filePathName);
     try {
-        if (!boost::filesystem::is_regular_file(p)) // 判断是文件
+        if (!std::filesystem::is_regular_file(p)) // 判断是文件
         {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*isExistRegularFile catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*isExistRegularFile catch unknown\n";
@@ -159,14 +157,14 @@ bool isExistRegularFile(const std::string &filePathName) {
 }
 
 bool isExistDirectory(const std::string &path) {
-    boost::filesystem::path p(path);
+    std::filesystem::path p(path);
     try {
-        if (!boost::filesystem::is_directory(p)) // Throws: filesystem_error;//boost::system::error_code ec;boost::filesystem::is_directory( bp, ec );
+        if (!std::filesystem::is_directory(p)) // Throws: filesystem_error;//boost::system::error_code ec;std::filesystem::is_directory( bp, ec );
         {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*isExistDirectory catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*isExistDirectory catch unknown\n";
@@ -175,14 +173,14 @@ bool isExistDirectory(const std::string &path) {
 }
 
 bool isExistPath(const std::string &path) {
-    boost::filesystem::path p(path);
+    std::filesystem::path p(path);
     try {
-        if (!boost::filesystem::exists(p)) // Throws: filesystem_error
+        if (!std::filesystem::exists(p)) // Throws: filesystem_error
         {
             return false;
         }
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*isExistPath catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*isExistPath catch unknown\n";
@@ -191,7 +189,7 @@ bool isExistPath(const std::string &path) {
 }
 
 bool getParentPath(const std::string &oldPath, std::string &newPath) {
-    boost::filesystem::path p(oldPath);
+    std::filesystem::path p(oldPath);
     if (p.has_parent_path()) {
         p = p.parent_path();
         newPath = p.string();
@@ -206,7 +204,7 @@ bool getParentPath(const std::string &oldPath, std::string &newPath, const uint3
         return true;
     }
 
-    boost::filesystem::path p(oldPath);
+    std::filesystem::path p(oldPath);
     uint32_t count = parentLevel;
     while (p.has_parent_path()) {
         p = p.parent_path(); // 如果path已经为空,则parent_path总是返回空.
@@ -221,12 +219,12 @@ bool getParentPath(const std::string &oldPath, std::string &newPath, const uint3
 }
 
 bool getCurrentPath(std::string &currentPath) {
-    boost::filesystem::path p;
+    std::filesystem::path p;
     try {
-        p = boost::filesystem::current_path();
+        p = std::filesystem::current_path();
         currentPath = p.string();
         return true;
-    } catch (const boost::filesystem::filesystem_error &fe) {
+    } catch (const std::filesystem::filesystem_error &fe) {
         std::cout << "*getCurrentPath catch " << fe.what() << "\n";
     } catch (...) {
         std::cout << "*getCurrentPath catch unknown\n";
@@ -235,5 +233,3 @@ bool getCurrentPath(std::string &currentPath) {
 }
 
 } // namespace wtoeutil
-
-#include "DataFileBoost.hpp"

@@ -14,7 +14,6 @@
 
 #include "utildef.hpp"
 #include <memory>
-#include <stdint.h>
 #include <string>
 
 namespace wtoeutil {

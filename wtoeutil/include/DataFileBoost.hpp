@@ -31,8 +31,8 @@ return true;
 template <typename ST>
 bool struct2File_boost(const ST &st, const std::string &filePath) {
 #if defined(WIN32) && defined(_MSC_VER)
-    boost::filesystem::path bp(filePath);
-    std::ofstream f(bp.BOOST_FILESYSTEM_C_STR, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc, _SH_DENYRW);
+    std::filesystem::path bp(filePath);
+    std::ofstream f(bp.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc, _SH_DENYRW);
     if (f.is_open() == false) {
         if (EACCES == errno) {
             _set_errno(0);
@@ -58,8 +58,8 @@ bool struct2File_boost(const ST &st, const std::string &filePath) {
         return false;
     }
 
-    boost::filesystem::path bp(filePath);
-    std::ofstream f(bp.BOOST_FILESYSTEM_C_STR, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+    std::filesystem::path bp(filePath);
+    std::ofstream f(bp.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
     if (f.is_open() == false) {
         std::cout << " struct2File open failed filePath = " << filePath << "\n";
         return false;
@@ -104,7 +104,7 @@ return true;
 template <typename ST>
 bool file2Struct_boost(const std::string &filePath, ST &st) {
 #if defined(WIN32) && defined(_MSC_VER)
-    boost::filesystem::path bp(filePath);
+    std::filesystem::path bp(filePath);
     std::ifstream f(bp.BOOST_FILESYSTEM_C_STR, std::ios_base::in | std::ios_base::binary, _SH_DENYWR);
     if (f.is_open() == false) {
         if (EACCES == errno) {
@@ -131,8 +131,8 @@ bool file2Struct_boost(const std::string &filePath, ST &st) {
         return false;
     }
 
-    boost::filesystem::path bp(filePath);
-    std::ifstream f(bp.BOOST_FILESYSTEM_C_STR, std::ios_base::in | std::ios_base::binary);
+    std::filesystem::path bp(filePath);
+    std::ifstream f(bp.c_str(), std::ios_base::in | std::ios_base::binary);
     if (f.is_open() == false) {
         std::cout << " file2Struct open failed filePath = " << filePath << "\n";
         return false;

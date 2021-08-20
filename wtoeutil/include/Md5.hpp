@@ -1,7 +1,6 @@
 #ifndef MD5_HPP_
 #define MD5_HPP_
 #include <fstream>
-#include <string>
 
 #include "utildef.hpp"
 

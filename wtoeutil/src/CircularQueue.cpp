@@ -1,7 +1,6 @@
 #include "CircularQueue.hpp"
 #include <chrono>
-#include <memory.h>
-#include <thread>
+#include <string.h>
 
 namespace wtoeutil {
 CCircularQueue::CCircularQueue()

@@ -16,8 +16,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <filesystem>
+#include <fstream>
 
 #include "utildef.hpp"
 

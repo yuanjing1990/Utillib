@@ -2,7 +2,6 @@
 #define CIRCULARQUEUE_HPP_
 
 #include <condition_variable>
-#include <iostream>
 #include <mutex>
 
 #include "utildef.hpp"
