@@ -32,7 +32,6 @@ void server_socket::start(void *) {
         return;
 
     fd_set readfds;
-    int new_socket, i;
     socklen_t addrlen;
     struct sockaddr_in address;
     while (true) {
