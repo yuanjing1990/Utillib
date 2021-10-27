@@ -1,6 +1,6 @@
 #include "yjcollector_policy.h"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <fstream>
 #include <stdlib.h>
 #include <string>
@@ -44,7 +44,7 @@ CopyPolicyImpl::~CopyPolicyImpl() {}
 bool CopyPolicyImpl::copy(const std::string &src, const std::string &srcDir,
                           const std::string &destDir,
                           RenamePolicy renamePolicy) {
-    if (src.find(srcDir) != 0 || !boost::filesystem::exists(destDir)) {
+    if (src.find(srcDir) != 0 || !std::filesystem::exists(destDir)) {
         return false;
     }
     std::string relativePath = src.substr(srcDir.size(), src.size());
@@ -54,8 +54,8 @@ bool CopyPolicyImpl::copy(const std::string &src, const std::string &srcDir,
     }
 
     std::string destFile = destDir + relativePath;
-    boost::filesystem::path path(destFile.substr(0, destFile.find_last_of("/")));
-    boost::filesystem::create_directories(path);
+    std::filesystem::path path(destFile.substr(0, destFile.find_last_of("/")));
+    std::filesystem::create_directories(path);
 
     DEBUG_PRINT("copy: %s -> %s", src.c_str(), destFile.c_str());
 

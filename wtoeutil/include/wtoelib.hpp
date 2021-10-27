@@ -4,7 +4,6 @@
 #include "CCfgManager.hpp"
 #include "CfgParser.hpp"
 #include "CircularQueue.hpp"
-#include "DataFileBoost.hpp"
 #include "FileSystem.hpp"
 #include "Md5.hpp"
 

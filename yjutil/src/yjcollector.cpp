@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <boost/filesystem.hpp>
 #include <dirent.h>
+#include <filesystem>
 #include <functional>
 #include <stdio.h>
 #include <string.h>
@@ -41,14 +41,14 @@ bool FileCollector::getFileVec(const std::string &dir,
 bool FileCollector::getFileVecInner(const std::string &dirRoot,
                                     const std::string &curDir,
                                     std::vector<std::string> &fileVec) {
-    boost::filesystem::directory_iterator cur(curDir);
-    boost::filesystem::directory_iterator end;
+    std::filesystem::directory_iterator cur(curDir);
+    std::filesystem::directory_iterator end;
 
     while (cur != end) {
-        boost::filesystem::path path(*cur);
-        if (boost::filesystem::is_directory(path)) {
+        std::filesystem::path path(*cur);
+        if (std::filesystem::is_directory(path)) {
             getFileVecInner(dirRoot, path.string(), fileVec);
-        } else if (boost::filesystem::is_regular(path)) {
+        } else if (std::filesystem::is_regular_file(path)) {
             fileVec.push_back(path.string());
         }
         ++cur;

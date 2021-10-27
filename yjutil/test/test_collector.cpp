@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
 #include <queue>
@@ -11,7 +11,7 @@
 #include "yjcollector_policy.h"
 
 using namespace yjutil;
-using namespace boost::filesystem;
+using namespace std::filesystem;
 
 static std::string sSrcPath = "/tmp/testyjutil/";
 static std::string sDestPath = "/tmp/testyjutil/copy_to/";
@@ -22,7 +22,7 @@ class TestCollector : public ::testing::Test {
 
     virtual void SetUp() {
         DEBUG_PRINT("SetUp ... ");
-        boost::filesystem::create_directories(sSrcPath);
+        std::filesystem::create_directories(sSrcPath);
         std::ofstream ofs(sSrcPath + "testfile.txt");
         ofs << "test";
         ofs.close();
@@ -30,7 +30,7 @@ class TestCollector : public ::testing::Test {
 
     virtual void TearDown() {
         DEBUG_PRINT("TearDown ... ");
-        boost::filesystem::remove_all(sSrcPath);
+        std::filesystem::remove_all(sSrcPath);
     }
 };
 

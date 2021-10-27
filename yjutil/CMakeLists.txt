@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(yjtuil)
-
+set(CMAKE_CXX_STANDARD 17)
 include_directories(include/)
 add_compile_options(-D_DEBUG)
 
@@ -11,5 +11,7 @@ link_libraries(yjutil crypto)
 
 aux_source_directory(test TEST_DIRS)
 add_executable(yjutil_test ${TEST_DIRS})
-link_libraries(yjutil_test yjutil)
-target_link_libraries(yjutil_test gtest z pthread boost_system boost_filesystem)
+find_package(GTest REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(OpenSSL REQUIRED)
+target_link_libraries(yjutil_test yjutil GTest::GTest ZLIB::ZLIB OpenSSL::Crypto)
