@@ -10,8 +10,13 @@ class loop_thread {
   public:
     loop_thread(){};
     ~loop_thread();
+    struct thread_msg;
+    typedef std::shared_ptr<thread_msg> sp_thread_msg;
+    typedef void (*thread_msg_handler)(sp_thread_msg &msg);
     struct thread_msg {
-        int what;
+        thread_msg(int w, thread_msg_handler h = nullptr):what(w), handler(h){}
+        int what{0};
+        thread_msg_handler handler{nullptr};
     };
     int start(std::string name);
     int stop();
@@ -34,8 +39,6 @@ class loop_thread {
     std::list<thread_event> m_eventList;
     std::mutex m_eventListMutex;
     std::condition_variable m_eventListCond;
-    typedef std::shared_ptr<thread_msg> sp_thread_msg;
-    typedef void (*thread_msg_handler)(sp_thread_msg &msg);
     thread_msg_handler m_handler{nullptr};
 };
 #endif
