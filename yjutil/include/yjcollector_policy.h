@@ -2,16 +2,16 @@
 #define YJCOLLECTOR_POLICY_H_
 
 #include "yjutil.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace yjutil {
 
 class CopyPolicyImpl;
 class FilterPolicyImpl;
 class RenamePolicyImpl;
-typedef boost::shared_ptr<CopyPolicyImpl> CopyPolicyImplSp;
-typedef boost::shared_ptr<FilterPolicyImpl> FilterPolicyImplSp;
-typedef boost::shared_ptr<RenamePolicyImpl> RenamePolicyImplSp;
+typedef std::shared_ptr<CopyPolicyImpl> CopyPolicyImplSp;
+typedef std::shared_ptr<FilterPolicyImpl> FilterPolicyImplSp;
+typedef std::shared_ptr<RenamePolicyImpl> RenamePolicyImplSp;
 
 class RenamePolicy {
   private:

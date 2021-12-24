@@ -1,11 +1,11 @@
 #ifndef YJCOLLECTOR_MGR_H
 #define YJCOLLECTOR_MGR_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <mutex>
 #include <set>
 
-using boost::shared_ptr;
+using std::shared_ptr;
 
 namespace yjutil {
 class CollectorMgr;

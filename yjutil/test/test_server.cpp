@@ -22,5 +22,5 @@ TEST_F(TestServer, test_demo) {
     // server.start(NULL);
     loop_thread lp;
     lp.start("Test");
-    lp.postMessage(std::make_shared<loop_thread::thread_msg>(), 5000);
+    lp.postMessage(std::move(std::make_shared<loop_thread::thread_msg>(0)), 5000);
 }

@@ -25,13 +25,13 @@ TEST(Test, test) {
 }
 
 TEST(TestYjUtil, test_gzip) {
-    int fd = open("test.txt", 755);
+    int fd = open("test.txt", 755, "w");
     gzFile gf = gzdopen(fd, "w");
     if (gf == NULL) {
         DEBUG_PRINT("gzopen failed!");
     }
 
-    char *buf = "Hello World zlib!";
+    const char *buf = "Hello World zlib!";
     gzwrite(gf, buf, strlen(buf));
     gzclose(gf);
 }
@@ -104,7 +104,7 @@ TEST(TestYjUtil, test_yjfile) {
     ASSERT_TRUE(removeDir(filePath));
 }
 
-int add(int &i) { ++i; }
+int add(int &i) { ++i; return 0;}
 
 TEST(TestYjUtil, test_yj) {
     int i = 1;

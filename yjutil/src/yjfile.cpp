@@ -39,7 +39,7 @@ bool isFileExist(const std::string &filePath) {
 }
 
 bool createFile(const std::string &filePath) {
-    int ret = open(filePath.c_str(), O_CREAT);
+    int ret = open(filePath.c_str(), O_CREAT, "w");
     if (ret != -1) {
         close(ret);
         return true;

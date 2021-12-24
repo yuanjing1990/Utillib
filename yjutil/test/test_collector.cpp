@@ -84,7 +84,7 @@ TEST_F(TestCollector, test_copy_policy) {
 }
 
 TEST_F(TestCollector, test_filecollector_docollect) {
-    boost::shared_ptr<Collector> collector(new FileCollector(sSrcPath, sDestPath, new CopyPolicyImpl(), new FilterPolicyImpl(), new RenamePolicyImpl()));
+    std::shared_ptr<Collector> collector(new FileCollector(sSrcPath, sDestPath, new CopyPolicyImpl(), new FilterPolicyImpl(), new RenamePolicyImpl()));
     ASSERT_FALSE(collector->doCollect());
 
     create_directories(sDestPath);
@@ -203,6 +203,7 @@ int get_result(std::vector<int> &vec, std::vector<int> &result) {
         result.push_back(cnt_after + cnt_before + 1);
         break;
     }
+    return 0;
 }
 
 void test_mytest2() {
