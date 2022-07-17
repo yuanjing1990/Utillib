@@ -17,21 +17,22 @@ set(LINUX_LINKER_FLAGS_EXE)
 # STL.
 set(LINUX_TOOLCHAIN_PATH /opt/arm-bcm2708/arm-linux-gnueabihf)
 list(APPEND CMAKE_FIND_ROOT_PATH "${LINUX_TOOLCHAIN_PATH}")
+list(APPEND CMAKE_FIND_ROOT_PATH "/opt/arm_lib_grpc")
 
 # Sysroot.
 set(CMAKE_SYSROOT ${LINUX_TOOLCHAIN_PATH}/arm-linux-gnueabihf/sysroot)
 
 # Toolchain.
-set(LINUX_C_COMPILER   "${LINUX_TOOLCHAIN_PATH}/bin/arm-linux-gnueabihf-gcc")
-set(LINUX_CXX_COMPILER "${LINUX_TOOLCHAIN_PATH}/bin/arm-linux-gnueabihf-g++")
-set(LINUX_ASM_COMPILER "${LINUX_TOOLCHAIN_PATH}/bin/arm-linux-gnueabihf-as")
+set(LINUX_C_COMPILER   "/usr/bin/arm-linux-gnueabihf-gcc-9")
+set(LINUX_CXX_COMPILER "/usr/bin/arm-linux-gnueabihf-g++-9")
+set(LINUX_ASM_COMPILER "/usr/bin/arm-linux-gnueabihf-as")
 
 set(CMAKE_C_COMPILER_ID_RUN TRUE)
 set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
-set(CMAKE_C_COMPILER_ID Clang)
-set(CMAKE_CXX_COMPILER_ID Clang)
-set(CMAKE_C_COMPILER_VERSION 3.8)
-set(CMAKE_CXX_COMPILER_VERSION 3.8)
+set(CMAKE_C_COMPILER_ID GNU)
+set(CMAKE_CXX_COMPILER_ID GNU)
+set(CMAKE_C_COMPILER_VERSION 9.4)
+set(CMAKE_CXX_COMPILER_VERSION 9.4)
 set(CMAKE_C_STANDARD_COMPUTED_DEFAULT 11)
 set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 98)
 set(CMAKE_CXX_STANDARD 11)
@@ -132,3 +133,4 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-builtin-macro-redefined -D'__FILE__=\"./$(subst $(realpath ${CMAKE_SOURCE_DIR})/,,$(abspath $<))\"'")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-builtin-macro-redefined -D'__FILE__=\"./$(subst $(realpath ${CMAKE_SOURCE_DIR})/,,$(abspath $<))\"'")
 
+set(BUILD_SHARED_LIBS OFF)
